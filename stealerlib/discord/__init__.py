@@ -5,7 +5,7 @@
     @package: stealerlib/discord/__init__.py
 """
 
-from stealerlib.exceptions import quiet
+from stealerlib.exceptions import catch
 
 
 class Discord:
@@ -14,6 +14,6 @@ class Discord:
         self.tokens = []
         self.accounts = []
 
-    @quiet
+    @catch
     def get_tokens(self) -> list:
         return []

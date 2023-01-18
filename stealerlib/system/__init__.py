@@ -5,7 +5,7 @@
     @package: stealerlib/system/__init__.py
 """
 
-from stealerlib.exceptions import quiet
+from stealerlib.exceptions import catch
 
 
 class System:
@@ -13,6 +13,6 @@ class System:
     def __init__(self):
         pass
 
-    @quiet
+    @catch
     def get_ip(self) -> str:
         return ""

