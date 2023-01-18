@@ -17,4 +17,5 @@ class CookieStealer:
     @quiet
     def get_cookies(self) -> list[tuple[str, ...]]:
         """Unfinished"""
+
         return [("")]
