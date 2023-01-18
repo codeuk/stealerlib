@@ -14,4 +14,5 @@ def quiet(func):
         except Exception as error:
             if debug:
                 print("[!] StealerLib handled an unexpected error: {}".format(error))
+            pass
     return handle
