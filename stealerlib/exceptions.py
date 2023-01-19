@@ -7,7 +7,7 @@
 
 debug = True
 
-def catch(func: callable):
+def catch(func: callable) -> callable:
     """A function decorator that catches and handles any exceptions thrown
 
     Parameters:
@@ -28,7 +28,6 @@ def catch(func: callable):
         except Exception as error:
             if debug:
                 print("[!] StealerLib handled an unexpected error: {}".format(error))
-            pass
 
     return handle
 
@@ -36,3 +35,4 @@ def catch(func: callable):
 class InvalidBrowserType(Exception):
     def __init__(self, message):
         self.message = message
+
