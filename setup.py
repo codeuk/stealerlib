@@ -1,3 +1,10 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+    @author:  codeuk
+    @package: setup.py
+"""
+
 import setuptools
 
 setuptools.setup(

