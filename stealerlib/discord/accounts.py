@@ -6,24 +6,6 @@
 
 from stealerlib.discord import *
 
-
-@dataclass
-class Account:
-    """Discord Account dataclass
-    
-    Note:
-        This dataclass isn't currently implemented
-    """
-
-    token: str
-    userid: str
-    username: str
-    discriminator: str
-
-    def __repr__(self) -> str:
-        return self.token
-
-
 class Token:
     """Discord Token related functions (get information and return an Account object)
 

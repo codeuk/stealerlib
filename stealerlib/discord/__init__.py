@@ -60,18 +60,6 @@ class Discord:
         return available_paths
 
     @catch
-    def get_accounts(self) -> list:
-        tokens = self.get_tokens()
-
-        for token in tokens:
-            # --
-            new_account = Account
-
-            self.accounts.append(account)
-
-        return self.accounts
-
-    @catch
     def get_tokens(self) -> list:
         available_paths = self.get_available_paths()
 
