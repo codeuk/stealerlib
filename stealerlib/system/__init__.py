@@ -9,7 +9,6 @@ from stealerlib.exceptions import catch
 
 
 class System:
-
     def __init__(self):
         pass
 
