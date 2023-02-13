@@ -22,7 +22,6 @@ class Opera:
         opera_banking    A list of (name, month, year, number, date_modified) lists for each saved bank card
     """
 
-
     def __init__(self):
         self.roaming = os.getenv("APPDATA")
         self.paths = {

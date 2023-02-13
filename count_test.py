@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     @author:  codeuk
-    @package: tests.py
+    @package: count_test.py
 """
 
 from stealerlib.wifi import WiFi

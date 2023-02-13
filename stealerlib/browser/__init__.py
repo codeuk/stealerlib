@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 from win32crypt import CryptUnprotectData
 
 from stealerlib.exceptions import catch
-from stealerlib.datatypes import DataTypes
+from stealerlib.datatypes import BrowserTypes
 
 from stealerlib.browser.opera import Opera
 from stealerlib.browser.chromium import Chromium

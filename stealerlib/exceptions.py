@@ -32,7 +32,10 @@ def catch(func: callable) -> callable:
     return handle
 
 
-class InvalidBrowserType(Exception):
+class InvalidOperatingSystemType(Exception):
     def __init__(self, message):
         self.message = message
 
+class InvalidBrowserType(Exception):
+    def __init__(self, message):
+        self.message = message

