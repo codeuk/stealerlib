@@ -12,12 +12,13 @@ import platform
 from typing import Union
 
 from stealerlib.exceptions import catch
-from stealerlib.datatypes import SystemTypes
 
-from stealerlib.system.processes import Processes
+from stealerlib.system.cpu import CPU
+from stealerlib.system.mem import Memory
+from stealerlib.system.types import SystemTypes
 
 
-class System(Processes):
+class System(CPU, Memory):
     """This class provides methods for extracting and interacting with system related information
         - for multiple different operating systems by utilizing the psutil package
     
@@ -31,6 +32,7 @@ class System(Processes):
     """
 
     def __init__(self):
-        Processes.__init__(self)
+        CPU.__init__(self)
+        Memory.__init__(self)
 
         self.platform = platform.system()

