@@ -20,7 +20,7 @@ class BrowserTypes:
         username: str
         password: str
 
-        def conv(self):
+        def conv(self) -> list:
             return [self.url, self.username, self.password]
  
     @dataclass
@@ -32,7 +32,7 @@ class BrowserTypes:
         expires: bool
         expire_date: str
 
-        def conv(self):
+        def conv(self) -> list:
             return [
                 self.host,
                 self.expires,
@@ -48,7 +48,7 @@ class BrowserTypes:
         title: str
         timestamp: int
 
-        def conv(self):
+        def conv(self) -> list:
             return [self.url, self.title, self.timestamp]
  
     @dataclass
@@ -56,7 +56,7 @@ class BrowserTypes:
         tab_url: str
         target_path: str
 
-        def conv(self):
+        def conv(self) -> list:
             return [self.tab_url, self.target_path]
  
     @dataclass
@@ -67,7 +67,7 @@ class BrowserTypes:
         number: str
         date_modified: str
 
-        def conv(self):
+        def conv(self) -> list:
             return [
                 self.name,
                 self.month,
@@ -87,7 +87,7 @@ class SystemTypes:
         parent: list[psutil.Process]
         children: list[psutil.Process]
 
-        def conv(self):
+        def conv(self) -> list:
             return [
                 self.pid,
                 self.name,
