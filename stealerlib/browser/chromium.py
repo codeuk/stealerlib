@@ -79,11 +79,11 @@ class Chromium:
 
         return temp_data
 
-    def get_encryption_key(self, path: str) -> bytes:
+    @staticmethod
+    def get_encryption_key(path: str) -> bytes:
         """Retrieves the master encryption key used to encrypt the user's data
 
         Parameters:
-            self (object): The object passed to the method
             path (str): The browser path to get the encryption key from
 
         Returns:
@@ -106,11 +106,11 @@ class Chromium:
 
         return master_key
 
-    def decrypt_password(self, buff: bytes, master_key: bytes) -> str:
+    @staticmethod
+    def decrypt_password(buff: bytes, master_key: bytes) -> str:
         """Decrypts an encrypted password using the given encryption key
 
         Parameters:
-            self (object): The object passed to the method
             password (str): The encrypted password to decrypt
             key (str): The master key to use for the decryption
 

