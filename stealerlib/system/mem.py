@@ -14,7 +14,7 @@ class Memory:
         self.partitions = []
 
     @catch
-    def get_partitions(self, conv: bool=True) -> list:
+    def get_partitions(self, conv: Optional[bool]=True) -> list:
         partitions = psutil.disk_partitions()
 
         for p in partitions:

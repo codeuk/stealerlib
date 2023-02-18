@@ -14,7 +14,20 @@ class Processes:
         self.processes = []
 
     @catch
-    def get_processes(self, conv: bool=True) -> list:
+    def get_processes(
+        self,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, SystemTypes.Process]]:
+        """Uses psutil to get all process id's, and uses get_process to get its information
+
+        Parameters:
+            self (object): The object passed to the method
+            conv (bool): Boolean whether to append the data as a converted value or a StealerLib Object
+
+        Returns:
+            list: A list of the scraped processes appended as a list or StealerLib objects
+        """
+
         pids = psutil.pids()
 
         for pid in pids:
@@ -26,7 +39,17 @@ class Processes:
 
         return self.processes
 
-    def get_process(self, pid: int) -> Union[None, SystemTypes.Process]:
+    def get_process(self, pid: int) -> SystemTypes.Process:
+        """Uses psutil to get information on a process using its supplied process id
+
+        Parameters:
+            self (object): The object passed to the method
+            pid (int): The processes id to look up
+
+        Returns:
+            SystemTypes.Process: A StealerLib object containing information on the process and interactivity
+        """
+
         p = psutil.Process(pid)
 
         process = SystemTypes.Process(
@@ -41,10 +64,14 @@ class Processes:
 
     @catch
     def kill_process(self, pid: int) -> None:
+        """Kills a process using psutil with the supplied process id"""
+
         p = psutil.Process(pid)
         p.kill()
 
     @catch
     def terminate_process(self, pid: int) -> None:
+        """Terminates a process using psutil with the supplied process id"""
+
         p = psutil.Process(pid)
         p.terminate()
