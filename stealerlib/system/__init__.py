@@ -14,12 +14,12 @@ import requests
 
 from typing import Union, Optional
 
+from stealerlib.decorators import *
 from stealerlib.exceptions import catch
 
 from stealerlib.system.cpu import CPU
 from stealerlib.system.mem import Memory
 from stealerlib.system.types import SystemTypes
-from stealerlib.system.decorators import *
 
 
 class System(CPU, Memory):

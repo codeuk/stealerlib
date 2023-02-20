@@ -80,7 +80,7 @@ if __name__ == '__main__':
     minecraft.get_accounts(conv=conv)
     print('Minecraft Accounts:', minecraft.accounts, '\n') # conv=True ->  [(email, username, uuid, token), ...]
                                                            # conv=False -> [MinecraftTypes.Account, ...]
-    
+
     # windows specific system information grabber
     print(system.comp_info,
           system.os_info,
