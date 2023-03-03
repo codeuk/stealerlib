@@ -31,10 +31,10 @@ class Programs:
 
         Parameters:
             self (object): The object passed to the method
-            conv (bool): Boolean whether to append the data as a converted value or a StealerLib object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
-            list: A list of the gathered programs information, stored in another list or a StealerLib object
+            list: A list of the gathered programs information, appended as a list or StealerLib objects
         """
 
         with RegistryKeyManager() as reg_key:
@@ -42,7 +42,7 @@ class Programs:
                 subkey_id = winreg.EnumKey(reg_key, program)
                 subkey = winreg.OpenKey(reg_key, subkey_id)
                 try:
-                    obj_program = self.get_program_information(key=subkey)
+                    obj_program = self.get_program_information(program_key=subkey)
                     self.programs.append(
                         obj_program.conv() if conv else obj_program
                     )
@@ -52,25 +52,18 @@ class Programs:
         return self.programs
 
     @staticmethod
-    def get_program_information(key: winreg.HKEYType) -> RegistryTypes.Program:
-        """Uses the provided, and context managed, HKEY to look up and parse the programs information from the registry
+    def get_program_information(program_key: winreg.HKEYType) -> RegistryTypes.Program:
+        """Uses the provided program key to look up and parse the programs information from the windows registry
 
         Parameters:
-            key (winreg.HKEYType): Windows registry sub-key used to lookup program information
+            program_key (winreg.HKEYType): Windows registry sub-key used to lookup program information
             
         Returns:
             RegistryTypes.Program: A StealerLib object containing the name and folder location of the parsed program
         """
 
-        name = winreg.QueryValueEx(key, "DisplayName")[0]
-        location = winreg.QueryValueEx(key, "InstallLocation")[0]
+        name = winreg.QueryValueEx(program_key, "DisplayName")[0]
+        location = winreg.QueryValueEx(program_key, "InstallLocation")[0]
         obj_program = RegistryTypes.Program(name=name, location=location)
 
         return obj_program
-
-
-if __name__ == "__main__":
-    programs = Programs()
-    installed_programs = programs.get_installed_programs()
-    for program in installed_programs:
-        print(f"Name: {program.name}\nLocation: {program.location}\n")

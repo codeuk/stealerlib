@@ -15,6 +15,8 @@ WIN_REG_HKEY = winreg.OpenKey(
 
 
 class RegistryKeyManager:
+    """Context manager for handling Windows register keys (HKEY's)"""
+
     def __enter__(self):
         return WIN_REG_HKEY
 

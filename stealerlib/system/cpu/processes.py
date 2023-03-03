@@ -30,10 +30,10 @@ class Processes:
 
         Parameters:
             self (object): The object passed to the method
-            conv (bool): Boolean whether to append the data as a converted value or a StealerLib object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
-            list: A list of the scraped processes appended as a list or StealerLib objects
+            list: A list of the gathered processes appended as a list or StealerLib objects
         """
 
         pids = psutil.pids()
@@ -47,11 +47,11 @@ class Processes:
 
         return self.processes
 
-    def get_process(self, pid: int) -> SystemTypes.Process:
+    @staticmethod
+    def get_process(pid: int) -> SystemTypes.Process:
         """Uses psutil to get information on a process using its supplied process id
 
         Parameters:
-            self (object): The object passed to the method
             pid (int): The processes id to look up
 
         Returns:
@@ -60,7 +60,7 @@ class Processes:
 
         p = psutil.Process(pid)
 
-        process = SystemTypes.Process(
+        obj_process = SystemTypes.Process(
             pid=pid,
             name=p.name(),
             status=p.status(),
@@ -68,17 +68,17 @@ class Processes:
             children=p.children()
         )
 
-        return process
+        return obj_process
 
     @catch
-    def kill_process(self, pid: int) -> None:
+    def kill_process(pid: int):
         """Kills a process using psutil with the supplied process id"""
 
         p = psutil.Process(pid)
         p.kill()
 
     @catch
-    def terminate_process(self, pid: int) -> None:
+    def terminate_process(pid: int):
         """Terminates a process using psutil with the supplied process id"""
 
         p = psutil.Process(pid)

