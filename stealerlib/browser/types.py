@@ -5,7 +5,6 @@
     @package: stealerlib/browser/types.py
 """
 
-
 from dataclasses import dataclass
 
 

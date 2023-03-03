@@ -5,9 +5,12 @@
     @package: stealerlib/exceptions.py
 """
 
+from typing import Callable
+
 debug = True
 
-def catch(func: callable) -> callable:
+
+def catch(func: Callable) -> Callable:
     """A function decorator that catches and handles any exceptions thrown
 
     Parameters:

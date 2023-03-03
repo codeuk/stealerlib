@@ -14,7 +14,6 @@ import requests
 
 from typing import Union, Optional
 
-from stealerlib.decorators import *
 from stealerlib.exceptions import catch
 
 from stealerlib.system.cpu import CPU
@@ -23,8 +22,8 @@ from stealerlib.system.types import SystemTypes
 
 
 class System(CPU, Memory):
-    """This class provides methods for extracting and interacting with system related information -
-       for multiple different operating systems by utilizing psutil and other related package
+    """This class provides methods for extracting and interacting with system-related information -
+       for multiple different operating systems by utilizing psutil and other related packages
 
     Supported Platforms (from psutil PyPI page):
         Linux
@@ -36,23 +35,29 @@ class System(CPU, Memory):
     """
 
     def __init__(self):
-        CPU.__init__(self)
-        Memory.__init__(self)
+        super(System, self).__init__()
 
         self.platform = platform.system()
         self.__load__()
 
+    @catch
     @staticmethod
-    def convert_size(size: bytes) -> str:
+    def get_ip() -> str:
+        ip = requests.get("https://icanhazip.com/").text
+
+        return ip.splitlines()[0]
+
+    @staticmethod
+    def convert_bytes(size: bytes) -> str:
         if not size:
             return "0B"
 
         sizes = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-        n = int(math.floor(math.log(size, 1024)))
-        power = math.pow(1024, n)
-        size = round(size / power, 2)
+        i = int(math.floor(math.log(size, 1024)))
+        pow = math.pow(1024, i)
+        size = round(size / pow, 2)
 
-        return "%s %s" % (size, sizes[n])
+        return "%s %s" % (size, sizes[i])
 
     def __load__(self):
         system = wmi.WMI()
@@ -64,10 +69,4 @@ class System(CPU, Memory):
         self.os_name = osi.Name.encode('utf-8').split(b'|')[0]
         self.os_build = osi.BuildNumber
         self.os_version = osi.Version
-        self.ram = self.convert_size(float(osi.TotalVisibleMemorySize))
-
-    @catch
-    def get_ip(self) -> str:
-        ip = requests.get("https://icanhazip.com/").text
-
-        return ip.splitlines()[0]
+        self.ram = self.convert_bytes(float(osi.TotalVisibleMemorySize))

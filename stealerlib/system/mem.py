@@ -8,13 +8,37 @@
 from stealerlib.system import *
 from stealerlib.system.types import SystemTypes
 
+swap_memory = psutil.swap_memory
+get_virtual_mem = psutil.virtual_memory
+
 
 class Memory:
+    """This class provides methods for extracting and parsing memory-related information using the psutil library
+
+    Attributes:
+        partitions  A list of partition information as a list of values or a StealerLib object for each available device partition
+    """
+
     def __init__(self):
+        super(Memory, self).__init__()
+
         self.partitions = []
 
     @catch
-    def get_partitions(self, conv: Optional[bool]=True) -> list:
+    def get_partitions(
+        self,
+        conv: Optional[bool]=True
+    ) -> list[Union[list, SystemTypes.Partition]]:
+        """Uses psutil to get all disk partitions, and parses their information
+
+        Parameters:
+            self (object): The object passed to the method
+            conv (bool): Boolean whether to append the data as a converted value or a StealerLib object
+
+        Returns:
+            list: A list of the scraped processes information, stored in another list or a StealerLib object
+        """
+
         partitions = psutil.disk_partitions()
 
         for p in partitions:
@@ -25,18 +49,9 @@ class Memory:
                 p.maxpath,
                 p.maxfile
             )
+
             self.partitions.append(
                 obj_partition.conv() if conv else obj_partition
             )
 
         return self.partitions
-
-    @catch
-    def get_virtual_mem(self):
-
-        return psutil.virtual_memory()
-
-    @catch
-    def swap_memory(self):
-
-        return psutil.swap_memory()

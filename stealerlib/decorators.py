@@ -7,11 +7,14 @@
 
 import platform
 
+from typing import Callable
+
 from stealerlib.exceptions import *
 
 # currently unused, will be implemented into stealerlib.system when there's a solid *nix stealer base
 
-def windows(func: callable) -> callable:
+
+def windows(func: Callable) -> Callable:
     """A function decorator that catches any calls for functions only-for the wrong operating system
 
     Parameters:
@@ -34,7 +37,7 @@ def windows(func: callable) -> callable:
 
     return checker
 
-def linux(func: callable) -> callable:
+def linux(func: Callable) -> Callable:
     """A function decorator that catches any calls for functions only-for the wrong operating system
 
     Parameters:

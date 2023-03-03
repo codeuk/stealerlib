@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     @author:  codeuk
-    @package: stealerlib/discord/accounts.py
+    @package: stealerlib/wifi/types.py
 """
 
 from stealerlib.wifi import *

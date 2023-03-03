@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     @author:  codeuk
-    @package: stealerlib/system/processes.py
+    @package: stealerlib/system/cpu/processes.py
 """
 
 from stealerlib.system import *
@@ -10,7 +10,15 @@ from stealerlib.system.types import SystemTypes
 
 
 class Processes:
+    """This class provides methods for extracting and parsing process-related information using the psutil library
+
+    Attributes:
+        processes  A list of device process information as a list of values or a StealerLib object for each available process
+    """
+
     def __init__(self):
+        super(Processes, self).__init__()
+
         self.processes = []
 
     @catch
@@ -18,11 +26,11 @@ class Processes:
         self,
         conv: Optional[bool]=True
     ) -> list[Union[list, SystemTypes.Process]]:
-        """Uses psutil to get all process id's, and uses get_process to get its information
+        """Uses psutil to get all process id's, and uses get_process to get each processes information
 
         Parameters:
             self (object): The object passed to the method
-            conv (bool): Boolean whether to append the data as a converted value or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted value or a StealerLib object
 
         Returns:
             list: A list of the scraped processes appended as a list or StealerLib objects

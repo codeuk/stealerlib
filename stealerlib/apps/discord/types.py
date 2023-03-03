@@ -36,6 +36,9 @@ class DiscordTypes:
         token: str
         valid: bool=False
 
+        def conv(self) -> list:
+            return [self.token, self.valid]
+
         def get_information(self):
             resp = API.get(
                 endpoint="/users/@me",

