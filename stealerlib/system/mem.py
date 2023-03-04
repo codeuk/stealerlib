@@ -8,7 +8,7 @@
 from stealerlib.system import *
 from stealerlib.system.types import SystemTypes
 
-swap_memory = psutil.swap_memory
+get_swap_memory = psutil.swap_memory
 get_virtual_mem = psutil.virtual_memory
 
 

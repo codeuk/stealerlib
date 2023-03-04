@@ -13,7 +13,7 @@ import sqlite3
 import tempfile
 import win32crypt
 
-from Cryptodome.Cipher import AES
+from Crypto.Cipher import AES
 from typing import Union, Optional
 from datetime import datetime, timedelta
 from win32crypt import CryptUnprotectData

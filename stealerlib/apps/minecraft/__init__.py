@@ -28,9 +28,8 @@ class Minecraft:
         self.database = self.__load__()
 
     @catch
-    @staticmethod
     def __load__() -> dict:
-        """'Loads' the Minecraft launcher profiles database if the path is available
+        """'Loads' the Minecraft launcher profiles database if it exists
 
         Raises:
             NoDatabaseFoundError: If there is an exception raised in the process of loading the database
