@@ -66,7 +66,7 @@
 
 <div align="center">
   <a href="https://github.com/codeuk/stealerlib">
-    <img src="https://github.com/codeuk/stealerlib/raw/main/images/screenshot.png" alt="Program Screenshot">
+    <img src="https://github.com/othneildrew/Best-README-Template/raw/master/images/screenshot.png" alt="Program Screenshot">
   </a>
 </div>
 
