@@ -64,7 +64,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<div align="center">
+  <a href="https://github.com/codeuk/stealerlib">
+    <img src="images/screenshot.png" alt="Program Screenshot">
+  </a>
+</div>
 
 This project is in its infancy and has very little documentation (outside of the code-base).
 
@@ -114,7 +118,7 @@ Method 2 (locally). Cloning this repository locally using Git
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more in-depth examples, please refer to the [Documentation](https://example.com)_
+_For more in-depth examples, please refer to the [Documentation](https://github.com/codeuk/stealerlib/wiki)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
