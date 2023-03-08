@@ -13,7 +13,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/codeuk/stealerlib">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://cdn4.iconfinder.com/data/icons/internet-security-flat-2/32/Internet_Security_danger_malware_website_web_virus-512.png" alt="Logo" width="130" height="130">
   </a>
 
   <h3 align="center">StealerLib</h3>
@@ -66,7 +66,7 @@
 
 <div align="center">
   <a href="https://github.com/codeuk/stealerlib">
-    <img src="images/screenshot.png" alt="Program Screenshot">
+    <img src="https://github.com/codeuk/stealerlib/raw/main/images/screenshot.png" alt="Program Screenshot">
   </a>
 </div>
 
@@ -187,7 +187,6 @@ Here are some resources I've found helpful during the creation of this project a
 [issues-shield]: https://img.shields.io/github/issues/codeuk/stealerlib.svg?style=for-the-badge
 [issues-url]: https://github.com/codeuk/stealerlib/issues
 [license-url]: https://github.com/codeuk/stealerlib/blob/master/LICENSE.txt
-[product-screenshot]: images/screenshot.png
 [Python]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
 [Python-url]: https://python.org/
 [Flask]: https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white
