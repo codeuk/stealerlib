@@ -154,7 +154,7 @@ The StealerLib project is distributed under the MIT License. See `LICENSE.txt` f
 
 Max - [yahweh#7073](https://discord.com/users/900072916597735444) 
 
-Project Link: [github.com/codeuk/stealerlib](https://github.com/codeuk/stealerli)
+Project Link: [github.com/codeuk/stealerlib](https://github.com/codeuk/stealerlib)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
