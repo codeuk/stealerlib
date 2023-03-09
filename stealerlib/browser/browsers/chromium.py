@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     @author:  codeuk
-    @package: stealerlib/browser/chromium.py
+    @package: stealerlib/browser/browsers/chromium.py
 """
 
 from stealerlib.browser import *

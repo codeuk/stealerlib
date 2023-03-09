@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     @author:  codeuk
-    @package: stealerlib/browser/opera.py
+    @package: stealerlib/browser/browsers/opera.py
 """
 
 from stealerlib.browser import *

@@ -5,7 +5,7 @@
     @package: stealerlib/registry/manager.py
 """
 
-import winreg
+from stealerlib.registry import *
 
 WIN_REG_PROGRAM_PATH = r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
 WIN_REG_HKEY = winreg.OpenKey(

@@ -5,6 +5,7 @@
     @package: stealerlib/system/__init__.py
 """
 
+import re
 import os
 import wmi
 import math
@@ -51,6 +52,8 @@ class System(CPU, Memory, Network):
     def __init__(self):
         super(System, self).__init__()
 
+    @catch
+    def get_windows_information(self):
         system = wmi.WMI()
         self.comp_info = system.Win32_ComputerSystem()[0]
         self.os_info = osi = system.Win32_OperatingSystem()[0]
@@ -61,7 +64,6 @@ class System(CPU, Memory, Network):
         self.os_build = osi.BuildNumber
         self.os_version = osi.Version
         self.ram = convert_bytes(float(osi.TotalVisibleMemorySize))
-
 
     @catch
     @staticmethod

