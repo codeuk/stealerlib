@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: StealerLib
+Version: 0.0.1
+Summary: Python Information Stealer Library (for Windows)
+Home-page: https://github.com/codeuk/stealerlib
+Author: Max D.
+Author-email: md54@gchq.agency
+License: MIT
+Keywords: INFORMATION,STEALER,AUTOMATION
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: MIT License
+License-File: LICENSE.txt

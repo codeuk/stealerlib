@@ -7,7 +7,7 @@
 
 from typing import Callable
 
-debug = True
+debug = False
 
 
 def catch(func: Callable) -> Callable:

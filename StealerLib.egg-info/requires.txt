@@ -1,0 +1,5 @@
+psutil
+requests
+WMI
+pypiwin32
+pycryptodome

@@ -1,0 +1,12 @@
+LICENSE.txt
+README.md
+setup.cfg
+setup.py
+StealerLib/decorators.py
+StealerLib/exceptions.py
+StealerLib/request.py
+StealerLib.egg-info/PKG-INFO
+StealerLib.egg-info/SOURCES.txt
+StealerLib.egg-info/dependency_links.txt
+StealerLib.egg-info/requires.txt
+StealerLib.egg-info/top_level.txt
