@@ -104,7 +104,7 @@ Method 1 (PyPI). Use PIP to install StealerLib
    pip install stealerlib
    ```
 
-Method 2 (locally). Cloning this repository locally using Git
+Method 2 (locally). Cloning this repository locally using Git - **RECOMMENDED**
    ```py
    git clone https://github.com/codeuk/stealerlib
    ```
